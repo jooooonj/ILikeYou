@@ -149,4 +149,5 @@ public class LikeablePersonControllerTests {
                         """.stripIndent().trim())));
         ;
     }
+
 }

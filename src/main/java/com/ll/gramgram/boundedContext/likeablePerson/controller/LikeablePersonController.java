@@ -5,6 +5,7 @@ import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
+import com.ll.gramgram.boundedContext.member.entity.Member;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -58,5 +60,19 @@ public class LikeablePersonController {
         }
 
         return "usr/likeablePerson/list";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable(value = "id") Long id) {
+
+        Member member = rq.getMember();
+        LikeablePerson findLikeablePerson = likeablePersonService.getLikeablePerson(id);
+        RsData<LikeablePerson> result = likeablePersonService.delete(findLikeablePerson, member);
+
+        if (result.isFail()) {
+            return rq.historyBack(result);
+        }
+
+        return rq.redirectWithMsg("/likeablePerson/list", result);
     }
 }
