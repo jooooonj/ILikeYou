@@ -6,6 +6,7 @@ import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
 import com.ll.gramgram.boundedContext.member.entity.Member;
+import com.ll.gramgram.standard.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,8 +55,11 @@ public class LikeablePersonService {
     @Transactional
     public RsData<LikeablePerson> delete(LikeablePerson likeablePerson, Member member) {
 
-        if (member.getInstaMember().getId() != likeablePerson.getFromInstaMember().getId()) {
-            return RsData.of("F-1", "권한이 없습니다.");
+        long actorInstaId = member.getInstaMember().getId();
+        long fromInstaId = likeablePerson.getFromInstaMember().getId();
+
+        if (actorInstaId != fromInstaId) {
+            return RsData.of("F-1", "삭제 권한이 없습니다.");
         }
 
         likeablePersonRepository.delete(likeablePerson);
@@ -63,6 +67,6 @@ public class LikeablePersonService {
     }
 
     public LikeablePerson getLikeablePerson(Long id){
-        return likeablePersonRepository.findById(id).orElseThrow();
+        return likeablePersonRepository.findById(id).orElseThrow(() -> new DataNotFoundException("잘못된 접근입니다."));
     }
 }
