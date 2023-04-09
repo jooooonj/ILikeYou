@@ -162,7 +162,8 @@ public class LikeablePersonControllerTests {
     void t006() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
-                .perform(post("/likeablePerson/delete/2"))
+                .perform(post("/likeablePerson/delete/2")
+                        .with(csrf()))
                 .andDo(print());
 
         // THEN
