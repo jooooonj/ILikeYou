@@ -162,7 +162,30 @@ public class LikeablePersonControllerTests {
     void t006() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
-                .perform(post("/likeablePerson/delete/2"))
+                .perform(post("/likeablePerson/delete/2")
+                        .with(csrf()))
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("delete"))
+                .andExpect(status().is3xxRedirection());
+
+
+        Assertions.assertThrows(DataNotFoundException.class, () -> {
+            likeablePersonService.getLikeablePerson(2L);
+        });
+    }
+
+    @Test
+    @DisplayName("호감 상대 삭제하기")
+    @WithUserDetails("user2")
+    void t007() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/delete/2")
+                        .with(csrf()))
                 .andDo(print());
 
         // THEN
