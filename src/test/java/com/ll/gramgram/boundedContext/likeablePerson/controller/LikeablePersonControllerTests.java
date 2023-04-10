@@ -182,7 +182,6 @@ public class LikeablePersonControllerTests {
     @Test
     @DisplayName("호감 상대 삭제하기 (자기가 등록한 대상이 아닐때) -> 예외 발생해야 한다.")
     @WithUserDetails("user2")
-    @Rollback(value = false)
     void t007() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -196,7 +195,50 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().methodName("delete"))
                 .andExpect(status().is4xxClientError());
 
-
     }
+
+    @Test
+    @DisplayName("이미 호감상대로 등록되어 있는 인스타 아이디 호감 등록(매력 포인트 중복) -> 실패")
+    @WithUserDetails("user3")
+    void t008() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/add")
+                        .with(csrf()) // CSRF 키 생성
+                        .param("username", "insta_user4")
+                        .param("attractiveTypeCode", "1")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is4xxClientError());
+        ;
+    }
+
+    @Test
+    @DisplayName("이미 호감상대로 등록되어 있는 인스타 아이디 호감 등록(매력 포인트 틀림) -> 수정(성공)")
+    @WithUserDetails("user3")
+    void t009() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(post("/likeablePerson/add")
+                        .with(csrf()) // CSRF 키 생성
+                        .param("username", "insta_user4")
+                        .param("attractiveTypeCode", "2")
+                )
+                .andDo(print());
+
+        // THEN
+        resultActions
+                .andExpect(handler().handlerType(LikeablePersonController.class))
+                .andExpect(handler().methodName("add"))
+                .andExpect(status().is3xxRedirection());
+        ;
+    }
+
+
 
 }
