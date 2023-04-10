@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -179,8 +180,9 @@ public class LikeablePersonControllerTests {
     }
 
     @Test
-    @DisplayName("호감 상대 삭제하기")
+    @DisplayName("호감 상대 삭제하기 (자기가 등록한 대상이 아닐때) -> 예외 발생해야 한다.")
     @WithUserDetails("user2")
+    @Rollback(value = false)
     void t007() throws Exception {
         // WHEN
         ResultActions resultActions = mvc
@@ -192,12 +194,9 @@ public class LikeablePersonControllerTests {
         resultActions
                 .andExpect(handler().handlerType(LikeablePersonController.class))
                 .andExpect(handler().methodName("delete"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is4xxClientError());
 
 
-        Assertions.assertThrows(DataNotFoundException.class, () -> {
-            likeablePersonService.getLikeablePerson(2L);
-        });
     }
 
 }
