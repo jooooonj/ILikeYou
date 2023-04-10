@@ -24,22 +24,27 @@ public class LikeablePersonService {
     public RsData<LikeablePerson> like(Member member, String username, int attractiveTypeCode) {
 
 
-        if (member.hasConnectedInstaMember() == false) {
+        if (member.hasConnectedInstaMember() == false)
             return RsData.of("F-2", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
-        }
+
 
         InstaMember fromInstaMember = member.getInstaMember();
         InstaMember toInstaMember = instaMemberService.findByUsernameOrCreate(username).getData();
 
-        if (fromInstaMember.getUsername().equals(username)) {
+        if (fromInstaMember.getUsername().equals(username))
             return RsData.of("F-1", "본인을 호감상대로 등록할 수 없습니다.");
-        }
+
 
         LikeablePerson findLikeablePerson = getLikeablePerson(fromInstaMember.getId(), toInstaMember.getId());
 
-        if (findLikeablePerson != null) {
+        if (findLikeablePerson != null)
             return rejectOrUpdate(attractiveTypeCode, findLikeablePerson);
-        }
+
+
+        if (fromInstaMember.getFromLikeablePeople().size() >= 10)
+            return RsData.of("F-2", "호감 상대로 등록할 수 있는 10명이 가득 차있습니다.");
+
+
 
         LikeablePerson likeablePerson = LikeablePerson
                 .builder()
