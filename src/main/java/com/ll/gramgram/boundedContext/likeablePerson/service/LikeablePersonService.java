@@ -44,8 +44,6 @@ public class LikeablePersonService {
         if (fromInstaMember.getFromLikeablePeople().size() >= 10)
             return RsData.of("F-2", "호감 상대로 등록할 수 있는 10명이 가득 차있습니다.");
 
-
-
         LikeablePerson likeablePerson = LikeablePerson
                 .builder()
                 .fromInstaMember(fromInstaMember) // 호감을 표시하는 사람의 인스타 멤버
