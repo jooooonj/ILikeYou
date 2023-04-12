@@ -21,3 +21,7 @@ logging:
     com.ll.gramgram_ai: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
+custom:
+  instaMember:
+    fromLikeablePeople:
+      maxSize: 10

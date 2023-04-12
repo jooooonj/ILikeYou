@@ -1,5 +1,6 @@
 package com.ll.gramgram.boundedContext.likeablePerson.service;
 
+import com.ll.gramgram.base.appConfig.AppConfig;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
@@ -34,25 +35,17 @@ public class LikeablePersonService {
         if (fromInstaMember.getUsername().equals(username))
             return RsData.of("F-1", "본인을 호감상대로 등록할 수 없습니다.");
 
-
         LikeablePerson findLikeablePerson = getLikeablePerson(fromInstaMember.getId(), toInstaMember.getId());
 
+        //이미 자신이 등록한 인스타계정이라면 수정 또는 예외처리
         if (findLikeablePerson != null)
             return rejectOrUpdate(attractiveTypeCode, findLikeablePerson);
 
-
-        if (fromInstaMember.getFromLikeablePeople().size() >= 10)
+        //호감 상대를 추가할 수 있는 사이즈가 되는지
+        if (canAddFromLikeablePersonBySize(fromInstaMember))
             return RsData.of("F-2", "호감 상대로 등록할 수 있는 10명이 가득 차있습니다.");
 
-        LikeablePerson likeablePerson = LikeablePerson
-                .builder()
-                .fromInstaMember(fromInstaMember) // 호감을 표시하는 사람의 인스타 멤버
-                .fromInstaMemberUsername(member.getInstaMember().getUsername()) // 중요하지 않음
-                .toInstaMember(toInstaMember) // 호감을 받는 사람의 인스타 멤버
-                .toInstaMemberUsername(toInstaMember.getUsername()) // 중요하지 않음
-                .attractiveTypeCode(attractiveTypeCode) // 1=외모, 2=능력, 3=성격
-                .build();
-
+        LikeablePerson likeablePerson = createLikeablePerson(member, attractiveTypeCode, fromInstaMember, toInstaMember);
         likeablePersonRepository.save(likeablePerson); // 저장
 
         // 너가 좋아하는 호감표시 생겼어.
@@ -62,6 +55,22 @@ public class LikeablePersonService {
         toInstaMember.addToLikeablePerson(likeablePerson);
 
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
+    }
+
+    private boolean canAddFromLikeablePersonBySize(InstaMember fromInstaMember) {
+        return fromInstaMember.getFromLikeablePeople().size() >= AppConfig.getMaxFromLikeablePeople();
+    }
+
+    private LikeablePerson createLikeablePerson(Member member, int attractiveTypeCode, InstaMember fromInstaMember, InstaMember toInstaMember) {
+        LikeablePerson likeablePerson = LikeablePerson
+                .builder()
+                .fromInstaMember(fromInstaMember) // 호감을 표시하는 사람의 인스타 멤버
+                .fromInstaMemberUsername(member.getInstaMember().getUsername()) // 중요하지 않음
+                .toInstaMember(toInstaMember) // 호감을 받는 사람의 인스타 멤버
+                .toInstaMemberUsername(toInstaMember.getUsername()) // 중요하지 않음
+                .attractiveTypeCode(attractiveTypeCode) // 1=외모, 2=능력, 3=성격
+                .build();
+        return likeablePerson;
     }
 
     private RsData<LikeablePerson> rejectOrUpdate(int attractiveTypeCode, LikeablePerson findLikeablePerson) {
@@ -78,6 +87,7 @@ public class LikeablePersonService {
     public List<LikeablePerson> findByFromInstaMemberId(Long fromInstaMemberId) {
         return likeablePersonRepository.findByFromInstaMemberId(fromInstaMemberId);
     }
+
 
     @Transactional
     public RsData<LikeablePerson> delete(LikeablePerson likeablePerson, Member member) {
