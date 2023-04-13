@@ -240,6 +240,7 @@ public class LikeablePersonControllerTests {
                 .andExpect(handler().methodName("add"))
                 .andExpect(status().is3xxRedirection());
         ;
+
     }
 
     @Test

@@ -51,4 +51,11 @@ public class InstaMember extends BaseEntity {
         toLikeablePeople.add(0, likeablePerson);
     }
 
+    public void delFromLikeablePerson(LikeablePerson likeablePerson) {
+        fromLikeablePeople.remove(likeablePerson);
+    }
+
+    public void delToLikeablePerson(LikeablePerson likeablePerson) {
+        toLikeablePeople.remove(likeablePerson);
+    }
 }

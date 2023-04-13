@@ -78,7 +78,7 @@ public class LikeablePersonService {
             return RsData.of("F-1", "이미 호감상대로 등록하신 회원입니다.");
         }
 
-        findLikeablePerson.setAttractiveTypeCode(attractiveTypeCode);
+        findLikeablePerson.modifyAttractiveTypeCode(attractiveTypeCode);
         likeablePersonRepository.save(findLikeablePerson);
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감포인트를 (%s)로 변경했습니다.".formatted(findLikeablePerson.getAttractiveTypeDisplayName(), findLikeablePerson.getAttractiveTypeCode()), findLikeablePerson);
 
@@ -92,14 +92,20 @@ public class LikeablePersonService {
     @Transactional
     public RsData<LikeablePerson> delete(LikeablePerson likeablePerson, Member member) {
 
-        long actorInstaId = member.getInstaMember().getId();
-        long fromInstaId = likeablePerson.getFromInstaMember().getId();
+        InstaMember actorInstaMember = member.getInstaMember();
+        InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
 
-        if (actorInstaId != fromInstaId) {
+        if (actorInstaMember.getId() != fromInstaMember.getId()) {
             return RsData.of("F-1", "삭제 권한이 없습니다.");
         }
 
+        InstaMember toInstaMember = likeablePerson.getToInstaMember();
+
         likeablePersonRepository.delete(likeablePerson);
+
+        toInstaMember.delToLikeablePerson(likeablePerson);
+        fromInstaMember.delFromLikeablePerson(likeablePerson);
+
         return RsData.of("S-1", "삭제되었습니다.");
     }
 
