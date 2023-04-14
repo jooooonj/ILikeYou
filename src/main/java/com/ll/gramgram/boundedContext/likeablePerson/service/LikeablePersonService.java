@@ -23,6 +23,16 @@ public class LikeablePersonService {
 
     @Transactional
     public RsData<LikeablePerson> like(Member member, String username, int attractiveTypeCode) {
+        RsData canLikeResult = canLike(member, username, attractiveTypeCode);
+        // S- : 성공 , F-0 : 수정가능, F- : 실패
+
+        //수정 코드 받은 경우
+        if(canLikeResult.getResultCode().equals("F-0"))
+            return updateAttractiveTypeCode(attractiveTypeCode, (LikeablePerson) canLikeResult.getData());
+
+        if(canLikeResult.isFail())
+            return canLikeResult;
+
         InstaMember fromInstaMember = member.getInstaMember();
         InstaMember toInstaMember = instaMemberService.findByUsernameOrCreate(username).getData();
 
@@ -56,7 +66,7 @@ public class LikeablePersonService {
     }
 
     @Transactional
-    public RsData<LikeablePerson> update(int newAttractiveTypeCode, LikeablePerson findLikeablePerson) {
+    public RsData<LikeablePerson> updateAttractiveTypeCode(int newAttractiveTypeCode, LikeablePerson findLikeablePerson) {
         //기존 코드
         String originalAttractiveTypeCode = findLikeablePerson.getAttractiveTypeDisplayName();
         
@@ -100,6 +110,7 @@ public class LikeablePersonService {
     }
 
     public RsData canLike(Member member, String username, int attractiveTypeCode){
+
         if (!checkResisterInstaMember(member))
             return RsData.of("F-1", "먼저 본인의 인스타그램 아이디를 입력해야 합니다.");
 
@@ -113,7 +124,7 @@ public class LikeablePersonService {
 
         //호감 상대를 추가할 수 있는 사이즈가 되는지
         if (!canAddFromLikeablePersonBySize(member))
-            return RsData.of("F-2", "호감 상대로 등록할 수 있는 10명이 가득 차있습니다.");
+            return RsData.of("F-3", "호감 상대로 등록할 수 있는 10명이 가득 차있습니다.");
 
         return RsData.of("S-1", "검증 성공, 호감 상대 등록 가능합니다.");
     }
@@ -133,7 +144,7 @@ public class LikeablePersonService {
         InstaMember toInstaMember = instaMemberService.findByUsername(username).orElse(null);
 
         if(toInstaMember == null)
-            return RsData.of("S-1", "등록가능");
+            return RsData.of("S-1", "중복이 아닙니다.");
 
         LikeablePerson findLikeablePerson = getLikeablePerson(fromInstaMember.getId(), toInstaMember.getId());
 
@@ -141,9 +152,10 @@ public class LikeablePersonService {
             if(findLikeablePerson.getAttractiveTypeCode() == attractiveTypeCode)
                 return RsData.of("F-4", "(%s)는 이미 등록하신 상대입니다.".formatted(toInstaMember.getUsername()));
 
+            //이미 등록되어 있는데 매력 포인트가 다르다면 수정할 수 있도록 객체를 넣어서 전달
             return RsData.of("F-0", "수정가능", findLikeablePerson);
         }
 
-        return RsData.of("S-1", "등록가능");
+        return RsData.of("S-1", "중복이 아닙니다.");
     }
 }
