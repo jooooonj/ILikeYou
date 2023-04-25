@@ -82,7 +82,7 @@ public class LikeablePersonService {
 
 
     @Transactional
-    public RsData<LikeablePerson> delete(LikeablePerson likeablePerson, Member member) {
+    public RsData<LikeablePerson> cancel(LikeablePerson likeablePerson, Member member) {
 
         InstaMember actorInstaMember = member.getInstaMember();
         InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
@@ -157,5 +157,22 @@ public class LikeablePersonService {
         }
 
         return RsData.of("S-1", "중복이 아닙니다.");
+    }
+
+    public RsData canModify(Member member, LikeablePerson likeablePerson) {
+        if (!member.hasConnectedInstaMember())
+            return RsData.of("F-1", "인스타 계정을 연결해주세요.");
+
+        if(member.getInstaMember().getId() != likeablePerson.getFromInstaMember().getId())
+            return RsData.of("F-1", "잘못된 접근입니다.");
+
+        return RsData.of("S-1", "호감 표시 수정이 가능합니다.");
+    }
+
+    @Transactional
+    public RsData<LikeablePerson> modify(Long id, int attractiveTypeCode) {
+        LikeablePerson likeablePerson = getLikeablePerson(id);
+        updateAttractiveTypeCode(attractiveTypeCode, likeablePerson);
+        return RsData.of("S-1", "매력 포인트 수정이 완료되었습니다.", likeablePerson);
     }
 }

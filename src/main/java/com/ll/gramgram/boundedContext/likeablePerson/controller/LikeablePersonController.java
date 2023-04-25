@@ -7,16 +7,14 @@ import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
 import com.ll.gramgram.boundedContext.member.entity.Member;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,21 +26,33 @@ public class LikeablePersonController {
     private final LikeablePersonService likeablePersonService;
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/add")
-    public String showAdd() {
-        return "usr/likeablePerson/add";
+    @GetMapping("/like")
+    public String showLike() {
+        return "usr/likeablePerson/like";
     }
 
     @AllArgsConstructor
     @Getter
     public static class AddForm {
+        @NotBlank
+        @Size(min = 3, max = 30)
         private final String username;
+        @NotNull
+        @Min(1)
+        @Max(3)
         private final int attractiveTypeCode;
     }
 
+    @AllArgsConstructor
+    @Getter
+    public static class ModifyForm {
+        private final int attractiveTypeCode;
+    }
+
+
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/add")
-    public String add(@Valid AddForm addForm) {
+    @PostMapping("/like")
+    public String like(@Valid AddForm addForm) {
 
         RsData<LikeablePerson> likeResult = likeablePersonService.like(rq.getMember(), addForm.getUsername(), addForm.getAttractiveTypeCode());
 
@@ -67,18 +77,45 @@ public class LikeablePersonController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable(value = "id") Long id) {
+    @DeleteMapping("/{id}")
+    public String cancel(@PathVariable(value = "id") Long id) {
 
         Member member = rq.getMember();
         LikeablePerson findLikeablePerson = likeablePersonService.getLikeablePerson(id);
 
-        RsData<LikeablePerson> result = likeablePersonService.delete(findLikeablePerson, member);
+        RsData<LikeablePerson> result = likeablePersonService.cancel(findLikeablePerson, member);
 
         if (result.isFail()) {
             return rq.historyBack(result);
         }
 
         return rq.redirectWithMsg("/likeablePerson/list", result);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify/{id}")
+    public String showModifyForm(Model model, @PathVariable("id") Long id) {
+
+        LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(id);
+        RsData result = likeablePersonService.canModify(rq.getMember(), likeablePerson);
+
+        if(result.isFail()) rq.historyBack(result);
+
+        model.addAttribute("likeablePerson", likeablePerson);
+        return "usr/likeablePerson/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify/{id}")
+    public String modify(@PathVariable("id") Long id, @Valid ModifyForm modifyForm) {
+
+        LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(id);
+        RsData canModifyResult = likeablePersonService.canModify(rq.getMember(), likeablePerson);
+
+        if(canModifyResult.isFail()) rq.historyBack(canModifyResult);
+
+        RsData<LikeablePerson> modifyResult = likeablePersonService.modify(id, modifyForm.getAttractiveTypeCode());
+
+        return rq.redirectWithMsg("/likeablePerson/list", modifyResult);
     }
 }
