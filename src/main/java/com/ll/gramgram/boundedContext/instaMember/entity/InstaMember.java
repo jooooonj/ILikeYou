@@ -43,6 +43,14 @@ public class InstaMember extends BaseEntity {
     @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
     private List<LikeablePerson> toLikeablePeople = new ArrayList<>();
 
+    private long likesCountByWomanAndAttractiveTypeCode1;
+    private long likesCountByWomanAndAttractiveTypeCode2;
+    private long likesCountByWomanAndAttractiveTypeCode3;
+    private long likesCountByManAndAttractiveTypeCode1;
+    private long likesCountByManAndAttractiveTypeCode2;
+    private long likesCountByManAndAttractiveTypeCode3;
+
+
     public void addFromLikeablePerson(LikeablePerson likeablePerson) {
         fromLikeablePeople.add(0, likeablePerson);
     }
@@ -65,4 +73,49 @@ public class InstaMember extends BaseEntity {
             default -> "남성";
         };
     }
+
+    public void increaseLikesCount(String gender, int attractiveTypeCode){
+        if(gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
+        if(gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
+        if(gender.equals("W") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3++;
+        if(gender.equals("M") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
+        if(gender.equals("M") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
+        if(gender.equals("M") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3++;
+    }
+
+    public void decreaseLikesCount(String gender, int attractiveTypeCode){
+        if(gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1--;
+        if(gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2--;
+        if(gender.equals("W") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3--;
+        if(gender.equals("M") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1--;
+        if(gender.equals("M") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2--;
+        if(gender.equals("M") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3--;
+    }
+
+    public long getLikesCountByMan(){
+        return likesCountByManAndAttractiveTypeCode1 + likesCountByManAndAttractiveTypeCode2 + likesCountByManAndAttractiveTypeCode3;
+    }
+
+    public long getLikesCountByWoman(){
+        return likesCountByWomanAndAttractiveTypeCode1 + likesCountByWomanAndAttractiveTypeCode2 + likesCountByWomanAndAttractiveTypeCode3;
+    }
+
+    public long getLikesCountByAll(){
+        return getLikesCountByMan() + getLikesCountByWoman();
+    }
+
+    public Long getLikesCountByAttractionTypeCode1() {
+        return likesCountByWomanAndAttractiveTypeCode1 + likesCountByManAndAttractiveTypeCode1;
+    }
+
+    public Long getLikesCountByAttractionTypeCode2() {
+        return likesCountByWomanAndAttractiveTypeCode2 + likesCountByManAndAttractiveTypeCode2;
+    }
+
+    public Long getLikesCountByAttractionTypeCode3() {
+        return likesCountByWomanAndAttractiveTypeCode3 + likesCountByManAndAttractiveTypeCode3;
+    }
+
+
+
 }
