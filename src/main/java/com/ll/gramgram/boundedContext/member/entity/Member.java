@@ -42,8 +42,18 @@ public class Member extends BaseEntity {
         return grantedAuthorities;
     }
 
+
+    public void connectInstaMember(InstaMember instaMember){
+        this.instaMember = instaMember;
+    }
+    public void disconnectInstaMember(){
+        instaMember = null;
+    }
+
     // 이 회원이 본인의 인스타ID를 등록했는지 안했는지
     public boolean hasConnectedInstaMember() {
         return instaMember != null;
     }
+
+
 }

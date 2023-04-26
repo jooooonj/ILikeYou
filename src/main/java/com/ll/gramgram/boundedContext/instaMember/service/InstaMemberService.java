@@ -28,20 +28,32 @@ public class InstaMemberService {
     // username : 입력한 본인 인스타 username
     // gender : 입력한 본인의 성별
     public RsData<InstaMember> connect(Member member, String username, String gender) {
+
+
         Optional<InstaMember> opInstaMember = findByUsername(username); // 혹시 다른 회원이 이미 입력하신 인스타 ID와 연결되었는지
 
-        // 등록이 되어있고, 성별이 U가 아니라
-        if (opInstaMember.isPresent() && !opInstaMember.get().getGender().equals("U")) {
-            // 그러면 실패
-            return RsData.of("F-1", "해당 인스타그램 아이디는 이미 다른 사용자와 연결되었습니다.");
+        // 등록이 되어있고
+        if (opInstaMember.isPresent()) {
+            // 계정 연결까지 되어 있으면 실패
+            if(opInstaMember.get().hasConnected())
+                return RsData.of("F-1", "해당 인스타그램 아이디는 이미 다른 사용자와 연결되었습니다.");
+            //계정 연결은 안되어 있으면
+            return connect(member, opInstaMember.get());
         }
 
-        //
-        RsData<InstaMember> instaMemberRsData = findByUsernameOrCreate(username, gender);
+        //계정이 아예 없으면 만들어서 연결
+        RsData<InstaMember> instaMemberRsData = create(username, gender);
+        InstaMember instaMember = instaMemberRsData.getData();
 
-        memberService.updateInstaMember(member, instaMemberRsData.getData());
+        return connect(member, instaMember);
+    }
 
-        return instaMemberRsData;
+    private RsData<InstaMember> connect(Member member, InstaMember instaMember){
+        memberService.connectInstaMember(member, instaMember);
+        instaMember.connectedByMember(member);
+        instaMemberRepository.save(instaMember);
+
+        return RsData.of("S-1", "인스타 계정이 연결되었습니다.");
     }
 
     // InstaMember 생성
@@ -85,6 +97,10 @@ public class InstaMemberService {
         return create(username, gender);
     }
 
+    public InstaMember findById(long id){
+        return instaMemberRepository.findById(id).orElseThrow();
+    }
+
     public void eventCanceledLike(LikeablePerson likeablePerson){
         InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
         InstaMember toInstaMember = likeablePerson.getToInstaMember();
@@ -113,5 +129,14 @@ public class InstaMemberService {
 
         toInstaMember.increaseLikesCount(fromInstaMember.getGender(), newAttractiveTypeCode);
         toInstaMember.decreaseLikesCount(fromInstaMember.getGender(), oldAttractiveTypeCode);
+    }
+
+    @Transactional
+    public RsData<InstaMember> disconnect(Member member, InstaMember instaMember) {
+        memberService.disconnectInstaMember(member);
+        instaMember.disConnected();
+        instaMemberRepository.save(instaMember);
+
+        return RsData.of("S-1", "인스타계정(%s)과 연결이 헤제되었습니다.".formatted(instaMember.getUsername()));
     }
 }

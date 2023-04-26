@@ -176,7 +176,7 @@ public class LikeablePersonService {
     }
 
     @Transactional
-    public RsData<LikeablePerson> modify(Long id, int attractiveTypeCode) {
+    public RsData<LikeablePerson> modifyAttract(Long id, int attractiveTypeCode) {
         LikeablePerson likeablePerson = getLikeablePerson(id);
         modifyAttractiveTypeCode(attractiveTypeCode, likeablePerson);
         return RsData.of("S-1", "매력 포인트 수정이 완료되었습니다.", likeablePerson);

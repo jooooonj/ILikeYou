@@ -114,7 +114,7 @@ public class LikeablePersonController {
 
         if (canModifyResult.isFail()) rq.historyBack(canModifyResult);
 
-        RsData<LikeablePerson> modifyResult = likeablePersonService.modify(id, modifyForm.getAttractiveTypeCode());
+        RsData<LikeablePerson> modifyResult = likeablePersonService.modifyAttract(id, modifyForm.getAttractiveTypeCode());
 
         return rq.redirectWithMsg("/likeablePerson/list", modifyResult);
     }

@@ -55,8 +55,8 @@ public class MemberService {
     // 해당 회원에게 인스타 계정을 연결시킨다.
     // 1:1 관계
     @Transactional
-    public void updateInstaMember(Member member, InstaMember instaMember) {
-        member.setInstaMember(instaMember);
+    public void connectInstaMember(Member member, InstaMember instaMember) {
+        member.connectInstaMember(instaMember);
         memberRepository.save(member); // 여기서 실제로 UPDATE 쿼리 발생
     }
 
@@ -69,5 +69,15 @@ public class MemberService {
 
         // 소셜 로그인를 통한 가입시 비번은 없다.
         return join(providerTypeCode, username, ""); // 최초 로그인 시 딱 한번 실행
+    }
+
+    @Transactional
+    public RsData<InstaMember> disconnectInstaMember(Member member){
+        InstaMember instaMember = member.getInstaMember();
+
+        member.disconnectInstaMember();
+        memberRepository.save(member);
+
+        return RsData.of("S-1", "인스타계정(%s)과 연결이 헤제되었습니다. 인스타계정을 연결해주세요.".formatted(instaMember.getUsername()));
     }
 }

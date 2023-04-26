@@ -12,9 +12,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -52,4 +50,25 @@ public class InstaMemberController {
 
         return rq.redirectWithMsg("/likeablePerson/like", "인스타그램 계정이 연결되었습니다.");
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}")
+    public String disconnect(@PathVariable("id") Long id) {
+        if (!rq.getMember().hasConnectedInstaMember()) {
+            return rq.historyBack("잘못된 접근입니다.");
+        }
+
+        if(rq.getMember().getInstaMember().getId() != id)
+            return rq.historyBack("잘못된 접근입니다.");
+
+        RsData<InstaMember> disconnectResult = instaMemberService.disconnect(rq.getMember(), rq.getMember().getInstaMember());
+
+        if (disconnectResult.isFail()) {
+            return rq.historyBack(disconnectResult);
+        }
+
+        return rq.redirectWithMsg("/instaMember/connect", disconnectResult);
+    }
+
+
 }
