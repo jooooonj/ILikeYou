@@ -56,7 +56,7 @@ public class LikeablePersonController {
 
         RsData<LikeablePerson> likeResult = likeablePersonService.like(rq.getMember(), addForm.getUsername(), addForm.getAttractiveTypeCode());
 
-        if(likeResult.isFail())
+        if (likeResult.isFail())
             return rq.historyBack(likeResult);
 
         return rq.redirectWithMsg("/likeablePerson/list", likeResult);
@@ -94,12 +94,12 @@ public class LikeablePersonController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String showModifyForm(Model model, @PathVariable("id") Long id) {
+    public String showModify(Model model, @PathVariable("id") Long id) {
 
         LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(id);
         RsData result = likeablePersonService.canModify(rq.getMember(), likeablePerson);
 
-        if(result.isFail()) rq.historyBack(result);
+        if (result.isFail()) rq.historyBack(result);
 
         model.addAttribute("likeablePerson", likeablePerson);
         return "usr/likeablePerson/modify";
@@ -112,7 +112,7 @@ public class LikeablePersonController {
         LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(id);
         RsData canModifyResult = likeablePersonService.canModify(rq.getMember(), likeablePerson);
 
-        if(canModifyResult.isFail()) rq.historyBack(canModifyResult);
+        if (canModifyResult.isFail()) rq.historyBack(canModifyResult);
 
         RsData<LikeablePerson> modifyResult = likeablePersonService.modify(id, modifyForm.getAttractiveTypeCode());
 

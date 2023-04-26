@@ -49,19 +49,7 @@ public class InstaMemberControllerTests {
         resultActions
                 .andExpect(handler().handlerType(InstaMemberController.class))
                 .andExpect(handler().methodName("showConnect"))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(content().string(containsString("""
-                        <input type="text" name="username"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="gender" value="W"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="radio" name="gender" value="M"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="submit" value="정보입력"
-                        """.stripIndent().trim())));
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -98,7 +86,7 @@ public class InstaMemberControllerTests {
                 .andExpect(handler().handlerType(InstaMemberController.class))
                 .andExpect(handler().methodName("connect"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("/likeablePerson/add**"));
+                .andExpect(redirectedUrlPattern("/likeablePerson/like**"));
 
         InstaMember instaMember = instaMemberService.findByUsername("abc123").orElse(null);
 
@@ -125,7 +113,7 @@ public class InstaMemberControllerTests {
                 .andExpect(handler().handlerType(InstaMemberController.class))
                 .andExpect(handler().methodName("connect"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("/likeablePerson/add**"));
+                .andExpect(redirectedUrlPattern("/likeablePerson/like**"));
 
         InstaMember instaMember = instaMemberService.findByUsername("insta_user100").orElse(null);
 

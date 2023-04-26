@@ -12,5 +12,4 @@ public class GramgramApplication {
         SpringApplication.run(GramgramApplication.class, args);
     }
 
-
 }

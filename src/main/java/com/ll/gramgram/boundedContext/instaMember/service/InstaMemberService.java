@@ -3,6 +3,7 @@ package com.ll.gramgram.boundedContext.instaMember.service;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.instaMember.repository.InstaMemberRepository;
+import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.member.entity.Member;
 import com.ll.gramgram.boundedContext.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -82,5 +83,35 @@ public class InstaMemberService {
 
         // 생성
         return create(username, gender);
+    }
+
+    public void eventCanceledLike(LikeablePerson likeablePerson){
+        InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
+        InstaMember toInstaMember = likeablePerson.getToInstaMember();
+
+        //나를 좋아하는 목록에서 삭제, 통계 감소, 내가 좋아하는 목록에서 삭제
+        toInstaMember.delToLikeablePerson(likeablePerson);
+        toInstaMember.decreaseLikesCount(fromInstaMember.getGender(), likeablePerson.getAttractiveTypeCode());
+        fromInstaMember.delFromLikeablePerson(likeablePerson);
+    }
+
+    public void eventLiked(LikeablePerson likeablePerson){
+        InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
+        InstaMember toInstaMember = likeablePerson.getToInstaMember();
+
+        // 너가 좋아요한거 목록에 추가
+        fromInstaMember.addFromLikeablePerson(likeablePerson);
+
+        // 너를 좋아요한거 목록에 추가
+        toInstaMember.addToLikeablePerson(likeablePerson);
+        toInstaMember.increaseLikesCount(fromInstaMember.getGender(), likeablePerson.getAttractiveTypeCode());
+    }
+
+    public void eventModifiedAttractiveType(LikeablePerson likeablePerson, int oldAttractiveTypeCode, int newAttractiveTypeCode){
+        InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
+        InstaMember toInstaMember = likeablePerson.getToInstaMember();
+
+        toInstaMember.increaseLikesCount(fromInstaMember.getGender(), newAttractiveTypeCode);
+        toInstaMember.decreaseLikesCount(fromInstaMember.getGender(), oldAttractiveTypeCode);
     }
 }

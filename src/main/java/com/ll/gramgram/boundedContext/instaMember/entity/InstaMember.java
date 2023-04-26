@@ -3,20 +3,12 @@ package com.ll.gramgram.boundedContext.instaMember.entity;
 import com.ll.gramgram.base.baseEntity.BaseEntity;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Builder
 @NoArgsConstructor
@@ -74,33 +66,33 @@ public class InstaMember extends BaseEntity {
         };
     }
 
-    public void increaseLikesCount(String gender, int attractiveTypeCode){
-        if(gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
-        if(gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
-        if(gender.equals("W") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3++;
-        if(gender.equals("M") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
-        if(gender.equals("M") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
-        if(gender.equals("M") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3++;
+    public void increaseLikesCount(String gender, int attractiveTypeCode) {
+        if (gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
+        if (gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
+        if (gender.equals("W") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3++;
+        if (gender.equals("M") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
+        if (gender.equals("M") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
+        if (gender.equals("M") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3++;
     }
 
-    public void decreaseLikesCount(String gender, int attractiveTypeCode){
-        if(gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1--;
-        if(gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2--;
-        if(gender.equals("W") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3--;
-        if(gender.equals("M") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1--;
-        if(gender.equals("M") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2--;
-        if(gender.equals("M") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3--;
+    public void decreaseLikesCount(String gender, int attractiveTypeCode) {
+        if (gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1--;
+        if (gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2--;
+        if (gender.equals("W") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3--;
+        if (gender.equals("M") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1--;
+        if (gender.equals("M") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2--;
+        if (gender.equals("M") && attractiveTypeCode == 3) likesCountByWomanAndAttractiveTypeCode3--;
     }
 
-    public long getLikesCountByMan(){
+    public long getLikesCountByMan() {
         return likesCountByManAndAttractiveTypeCode1 + likesCountByManAndAttractiveTypeCode2 + likesCountByManAndAttractiveTypeCode3;
     }
 
-    public long getLikesCountByWoman(){
+    public long getLikesCountByWoman() {
         return likesCountByWomanAndAttractiveTypeCode1 + likesCountByWomanAndAttractiveTypeCode2 + likesCountByWomanAndAttractiveTypeCode3;
     }
 
-    public long getLikesCountByAll(){
+    public long getLikesCountByAll() {
         return getLikesCountByMan() + getLikesCountByWoman();
     }
 
@@ -115,7 +107,6 @@ public class InstaMember extends BaseEntity {
     public Long getLikesCountByAttractionTypeCode3() {
         return likesCountByWomanAndAttractiveTypeCode3 + likesCountByManAndAttractiveTypeCode3;
     }
-
 
 
 }

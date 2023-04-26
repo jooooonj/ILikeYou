@@ -11,7 +11,7 @@ public class AppConfig {
     static int maxFromLikeablePeople;
 
     @Value("${custom.instaMember.fromLikeablePeople.maxSize}")
-    public void setMaxFromLikeablePeople(int num){
+    public void setMaxFromLikeablePeople(int num) {
         AppConfig.maxFromLikeablePeople = num;
     }
 }

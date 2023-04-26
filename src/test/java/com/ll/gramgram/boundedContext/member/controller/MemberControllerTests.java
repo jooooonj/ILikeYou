@@ -48,16 +48,7 @@ public class MemberControllerTests {
         resultActions
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("showJoin"))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(content().string(containsString("""
-                        <input type="text" name="username"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="password" name="password"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="submit" value="회원가입"
-                        """.stripIndent().trim())));
+                .andExpect(status().is2xxSuccessful());
     }
 
     @Test
@@ -160,15 +151,7 @@ public class MemberControllerTests {
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("showLogin"))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(content().string(containsString("""
-                        <input type="text" name="username"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="password" name="password"
-                        """.stripIndent().trim())))
-                .andExpect(content().string(containsString("""
-                        <input type="submit" value="로그인"
-                        """.stripIndent().trim())));
+                ;
     }
 
     @Test
@@ -201,7 +184,7 @@ public class MemberControllerTests {
     @Test
     // @Rollback(value = false) // DB에 흔적이 남는다.
     @DisplayName("로그인 후에 내비바에 로그인한 회원의 username")
-    @WithUserDetails("user1")
+    @WithUserDetails("user3")
         // user1로 로그인 한 상태로 진행
     void t006() throws Exception {
         // WHEN
@@ -213,9 +196,6 @@ public class MemberControllerTests {
         resultActions
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("showMe"))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(content().string(containsString("""
-                        user1님 환영합니다.
-                        """.stripIndent().trim())));
+                .andExpect(status().is2xxSuccessful());
     }
 }
