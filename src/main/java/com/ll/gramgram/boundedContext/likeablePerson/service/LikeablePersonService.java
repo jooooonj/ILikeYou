@@ -67,16 +67,17 @@ public class LikeablePersonService {
     @Transactional
     public RsData<LikeablePerson> modifyAttractiveTypeCode(int newAttractiveTypeCode, LikeablePerson likeablePerson) {
         //기존 코드
-        String originalAttractiveTypeCode = likeablePerson.getAttractiveTypeDisplayName();
+        String originalAttract = likeablePerson.getAttractiveTypeDisplayName();
         int oldAttractiveTypeCode = likeablePerson.getAttractiveTypeCode();
 
         applicationEventPublisher.publishEvent(new EventModifiedAttractiveType(this,likeablePerson, oldAttractiveTypeCode, newAttractiveTypeCode));
 
         likeablePerson.modifyAttractiveTypeCode(newAttractiveTypeCode);
+        String newAttract = likeablePerson.getAttractiveTypeDisplayName();
 
         likeablePersonRepository.save(likeablePerson);
-        return RsData.of("S-1", "입력하신 인스타유저(%s)의 호감포인트를(%s)에서 (%s)로 변경했습니다."
-                .formatted(likeablePerson.getAttractiveTypeDisplayName(), originalAttractiveTypeCode, newAttractiveTypeCode), likeablePerson);
+        return RsData.of("S-1", "인스타유저(%s)의 호감포인트를(%s)에서 (%s)로 변경했습니다."
+                .formatted(likeablePerson.getToInstaMemberUsername(), originalAttract, newAttract), likeablePerson);
     }
 
     public List<LikeablePerson> findByFromInstaMemberId(Long fromInstaMemberId) {
@@ -173,12 +174,5 @@ public class LikeablePersonService {
             return RsData.of("F-1", "잘못된 접근입니다.");
 
         return RsData.of("S-1", "호감 표시 수정이 가능합니다.");
-    }
-
-    @Transactional
-    public RsData<LikeablePerson> modifyAttract(Long id, int attractiveTypeCode) {
-        LikeablePerson likeablePerson = getLikeablePerson(id);
-        modifyAttractiveTypeCode(attractiveTypeCode, likeablePerson);
-        return RsData.of("S-1", "매력 포인트 수정이 완료되었습니다.", likeablePerson);
     }
 }

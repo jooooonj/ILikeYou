@@ -4,8 +4,8 @@ spring:
       filter:
         enabled: true
   profiles:
-    active: dev
     include: secret
+    active: dev
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:

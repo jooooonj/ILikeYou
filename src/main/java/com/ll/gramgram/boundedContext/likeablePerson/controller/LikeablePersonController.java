@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/likeablePerson")
+@RequestMapping("/usr/likeablePerson")
 @RequiredArgsConstructor
 public class LikeablePersonController {
     private final Rq rq;
@@ -59,7 +59,7 @@ public class LikeablePersonController {
         if (likeResult.isFail())
             return rq.historyBack(likeResult);
 
-        return rq.redirectWithMsg("/likeablePerson/list", likeResult);
+        return rq.redirectWithMsg("/usr/likeablePerson/list", likeResult);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -89,7 +89,7 @@ public class LikeablePersonController {
             return rq.historyBack(result);
         }
 
-        return rq.redirectWithMsg("/likeablePerson/list", result);
+        return rq.redirectWithMsg("/usr/likeablePerson/list", result);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -114,8 +114,8 @@ public class LikeablePersonController {
 
         if (canModifyResult.isFail()) rq.historyBack(canModifyResult);
 
-        RsData<LikeablePerson> modifyResult = likeablePersonService.modifyAttract(id, modifyForm.getAttractiveTypeCode());
+        RsData<LikeablePerson> modifyResult = likeablePersonService.modifyAttractiveTypeCode(modifyForm.getAttractiveTypeCode(), likeablePerson);
 
-        return rq.redirectWithMsg("/likeablePerson/list", modifyResult);
+        return rq.redirectWithMsg("/usr/likeablePerson/list", modifyResult);
     }
 }

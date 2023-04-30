@@ -6,12 +6,12 @@
 
 <body>
 
-<main layout:fragment="main">
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
     <th:block th:unless="${@rq.member.hasConnectedInstaMember}">
         <div>먼저 본인의 인스타그램 아이디를 입력해주세요.</div>
 
         <div>
-            <a href="/instaMember/connect" class="btn btn-link">본인의 인스타그램 아이디 입력하기</a>
+            <a href="/usr/instaMember/connect" class="btn btn-link">본인의 인스타그램 아이디 입력하기</a>
         </div>
     </th:block>
 
