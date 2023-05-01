@@ -19,10 +19,18 @@ import java.util.List;
 @Getter
 public class InstaMember extends InstaMemberBase {
 
+    @Setter
     @Column(unique = true)
     private String username;
     @Setter
     private String gender;
+
+    @Setter
+    @Column(unique = true)
+    private String oauthId;
+
+    @Setter
+    private String accessToken;
 
     @OneToOne // 1:1
     @Setter

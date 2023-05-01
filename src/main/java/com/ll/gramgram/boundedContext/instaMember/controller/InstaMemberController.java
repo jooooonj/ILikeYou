@@ -70,5 +70,25 @@ public class InstaMemberController {
         return rq.redirectWithMsg("/usr/instaMember/connect", disconnectResult);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/connectByApi")
+    public String showConnectByApi() {
+        return "usr/instaMember/connectByApi";
+    }
 
+    @AllArgsConstructor
+    @Getter
+    public static class ConnectByApiForm {
+        @NotBlank
+        @Size(min = 1, max = 1)
+        private final String gender;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/connectByApi")
+    public String connectByApi(@Valid ConnectByApiForm connectForm) {
+        rq.setSessionAttr("connectByApi__gender", connectForm.getGender());
+
+        return "redirect:/oauth2/authorization/instagram";
+    }
 }
