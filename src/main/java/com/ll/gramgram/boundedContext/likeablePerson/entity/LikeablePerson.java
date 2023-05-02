@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
@@ -13,6 +15,8 @@ import lombok.*;
 @Getter
 @Builder
 public class LikeablePerson extends BaseEntity {
+
+    private LocalDateTime modifyUnlockDate;
 
     @ManyToOne
     @ToString.Exclude
@@ -25,8 +29,20 @@ public class LikeablePerson extends BaseEntity {
 
     private int attractiveTypeCode; // 매력포인트(1=외모, 2=성격, 3=능력)
 
+    public boolean isModifyUnlocked() {
+        return modifyUnlockDate.isBefore(LocalDateTime.now());
+    }
+
+    public String getModifyUnlockDateRemainStrHuman() {
+        return "2시간 16분";
+    }
+
     public void modifyAttractiveTypeCode(int attractiveTypeCode) {
         this.attractiveTypeCode = attractiveTypeCode;
+    }
+
+    public void genModifyUnlockDate(LocalDateTime dateTime){
+        modifyUnlockDate = dateTime;
     }
 
     public String getAttractiveTypeDisplayName() {

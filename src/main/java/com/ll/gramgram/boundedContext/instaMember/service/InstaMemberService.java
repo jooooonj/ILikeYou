@@ -51,6 +51,7 @@ public class InstaMemberService {
         return connect(member, instaMember);
     }
 
+    @Transactional
     public RsData<InstaMember> connect(Member actor, String gender, String oauthId, String username, String accessToken) {
         Optional<InstaMember> opInstaMember = instaMemberRepository.findByOauthId(oauthId);
 
