@@ -18,6 +18,8 @@ public class LikeablePerson extends BaseEntity {
 
     private LocalDateTime modifyUnlockDate;
 
+
+
     @ManyToOne
     @ToString.Exclude
     private InstaMember fromInstaMember; // 호감을 표시한 사람(인스타 멤버)
@@ -39,8 +41,8 @@ public class LikeablePerson extends BaseEntity {
 
         if (second != 0) {
             int nanos = tmpDateTime.getNano();
-            int roundedNanos = (int) Math.round(nanos / 1e9) * 1_000_000_000;
-            tmpDateTime.withSecond(0).withNano(0).plusMinutes(1).withSecond(0).withNano(roundedNanos);
+            int roundedNanos = (int) Math.round(nanos / 1e9) * 999_999_999;
+            tmpDateTime = tmpDateTime.withSecond(0).withNano(0).plusMinutes(1).withSecond(0).withNano(roundedNanos);
         }
 
         int hour = tmpDateTime.getHour();

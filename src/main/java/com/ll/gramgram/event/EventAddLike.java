@@ -5,9 +5,9 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class EventLiked extends ApplicationEvent {
+public class EventAddLike extends ApplicationEvent {
     private LikeablePerson likeablePerson;
-    public EventLiked(Object source, LikeablePerson likeablePerson) {
+    public EventAddLike(Object source, LikeablePerson likeablePerson) {
         super(source);
         this.likeablePerson = likeablePerson;
     }

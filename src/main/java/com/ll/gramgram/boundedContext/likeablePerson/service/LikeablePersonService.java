@@ -8,7 +8,7 @@ import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.repository.LikeablePersonRepository;
 import com.ll.gramgram.boundedContext.member.entity.Member;
 import com.ll.gramgram.event.EventCanceledLike;
-import com.ll.gramgram.event.EventLiked;
+import com.ll.gramgram.event.EventAddLike;
 import com.ll.gramgram.event.EventModifiedAttractiveType;
 import com.ll.gramgram.standard.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class LikeablePersonService {
 
         LikeablePerson likeablePerson = createLikeablePerson(attractiveTypeCode, fromInstaMember, toInstaMember);
         likeablePersonRepository.save(likeablePerson); // 저장
-        applicationEventPublisher.publishEvent(new EventLiked(this, likeablePerson));
+        applicationEventPublisher.publishEvent(new EventAddLike(this, likeablePerson));
         return RsData.of("S-1", "입력하신 인스타유저(%s)를 호감상대로 등록되었습니다.".formatted(username), likeablePerson);
     }
 
@@ -99,7 +99,7 @@ public class LikeablePersonService {
         }
 
         if(!likeablePerson.isModifyUnlocked())
-            return RsData.of("F-3", "쿨타임으로 인해 수정이 불가능합니다.");
+            return RsData.of("F-3", "쿨타임으로 인해 삭제가 불가능합니다.");
 
 
         InstaMember toInstaMember = likeablePerson.getToInstaMember();

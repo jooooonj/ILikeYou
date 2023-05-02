@@ -6,6 +6,7 @@ import com.ll.gramgram.boundedContext.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class NotificationController {
             return rq.redirectWithMsg("/usr/instaMember/connect", "먼저 본인의 인스타그램 아이디를 입력해주세요.");
         }
 
-        List<Notification> notifications = notificationService.findByToInstaMember(rq.getMember().getInstaMember());
+        List<Notification> notifications = notificationService.getNotificationsAfterSetTimeLapse(rq.getMember().getInstaMember());
 
         model.addAttribute("notifications", notifications);
 
