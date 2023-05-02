@@ -70,4 +70,16 @@ public class LikeablePersonServiceTests {
                 likeablePersonToBts.getModifyUnlockDate().isEqual(AppConfig.genLikeModifyCoolTime()));
     }
 
+    @Test
+    @DisplayName("몇시 몇분부터 수정,삭제를 할 수 있는지 잘 나오는지 확인")
+    void t005() throws Exception {
+
+        Member memberUser3 = memberService.findByUsername("user3").orElseThrow();
+        LikeablePerson likeablePersonToBts = likeablePersonService.like(memberUser3, "bts", 3).getData();
+
+        String modifyUnlockDateTime = likeablePersonToBts.getModifyUnlockDateRemainStrHuman();
+        System.out.println(modifyUnlockDateTime);
+
+    }
+
 }

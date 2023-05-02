@@ -173,7 +173,7 @@ public class LikeablePersonService {
             return RsData.of("F-1", "인스타 계정을 연결해주세요.");
 
         if (member.getInstaMember().getId() != likeablePerson.getFromInstaMember().getId())
-            return RsData.of("F-1", "잘못된 접근입니다.");
+            return RsData.of("F-2", "잘못된 접근입니다.");
 
         return RsData.of("S-1", "호감 표시 수정이 가능합니다.");
     }

@@ -34,7 +34,18 @@ public class LikeablePerson extends BaseEntity {
     }
 
     public String getModifyUnlockDateRemainStrHuman() {
-        return "2시간 16분";
+        LocalDateTime tmpDateTime = modifyUnlockDate;
+        int second = tmpDateTime.getSecond();
+
+        if (second != 0) {
+            int nanos = tmpDateTime.getNano();
+            int roundedNanos = (int) Math.round(nanos / 1e9) * 1_000_000_000;
+            tmpDateTime.withSecond(0).withNano(0).plusMinutes(1).withSecond(0).withNano(roundedNanos);
+        }
+
+        int hour = tmpDateTime.getHour();
+        int minute = tmpDateTime.getMinute();
+        return String.format("%d시 %d분", hour, minute);
     }
 
     public void modifyAttractiveTypeCode(int attractiveTypeCode) {
