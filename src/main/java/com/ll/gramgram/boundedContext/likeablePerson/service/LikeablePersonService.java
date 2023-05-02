@@ -98,6 +98,9 @@ public class LikeablePersonService {
             return RsData.of("F-1", "삭제 권한이 없습니다.");
         }
 
+        if(!likeablePerson.isModifyUnlocked())
+            return RsData.of("F-3", "쿨타임으로 인해 수정이 불가능합니다.");
+
 
         InstaMember toInstaMember = likeablePerson.getToInstaMember();
 
@@ -174,6 +177,9 @@ public class LikeablePersonService {
 
         if (member.getInstaMember().getId() != likeablePerson.getFromInstaMember().getId())
             return RsData.of("F-2", "잘못된 접근입니다.");
+
+        if(!likeablePerson.isModifyUnlocked())
+            return RsData.of("F-3", "쿨타임으로 인해 수정이 불가능합니다.");
 
         return RsData.of("S-1", "호감 표시 수정이 가능합니다.");
     }
