@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @ToString(callSuper = true)
 public class Notification extends BaseEntity {
+    @Setter
     private LocalDateTime readDate;
     @ManyToOne
     @ToString.Exclude

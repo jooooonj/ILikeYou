@@ -19,9 +19,9 @@
 
 
         <div class="flex flex-col gap-4" th:if="${!#lists.isEmpty(notifications)}"
-             th:each="notificaion, loop : ${notifications}">
+             th:each="notificaion : ${notifications}">
             <th:block th:if="${notificaion.isTypeLike}">
-                <div class="card bg-base-100 shadow-xl" th:if="${notificaion.typeLike}">
+                <div class="card bg-base-100 shadow-xl">
                     <div class="card-body">
                         <div class="flex flex-col gap-2">
                             <div>
@@ -52,7 +52,7 @@
             </th:block>
 
             <th:block th:unless="${notificaion.isTypeLike}">
-                <div class="card bg-base-100 shadow-xl">
+                <div class="card bg-base-100 shadow-xl ms-2">
                     <div class="card-body">
                         <div class="flex flex-col gap-2">
                             <div>

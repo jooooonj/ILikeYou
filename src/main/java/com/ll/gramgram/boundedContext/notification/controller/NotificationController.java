@@ -29,8 +29,12 @@ public class NotificationController {
 
         List<Notification> notifications = notificationService.getNotificationsAfterSetTimeLapse(rq.getMember().getInstaMember());
 
-        model.addAttribute("notifications", notifications);
+        //읽음 처리
+        for(Notification notification : notifications){
+            notificationService.setReadDate(notification);
+        }
 
+        model.addAttribute("notifications", notifications);
         return "usr/notification/list";
     }
 }

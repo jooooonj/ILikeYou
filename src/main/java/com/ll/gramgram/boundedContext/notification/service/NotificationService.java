@@ -32,6 +32,11 @@ public class NotificationService {
         return notificationRepository.findByToInstaMember(toInstaMember);
     }
 
+    public void setReadDate(Notification notification){
+        if(notification.getReadDate()==null)
+            notification.setReadDate(LocalDateTime.now());
+    }
+
     private void setTimeLapse(List<Notification> notifications){
         for(Notification notification : notifications){
             notification.setTimeLapse(Time.calculateTimeLapse(notification.getCreateDate()));
