@@ -164,6 +164,9 @@ public class InstaMemberService {
         // 너를 좋아요한거 목록에 추가
         toInstaMember.addToLikeablePerson(likeablePerson);
         toInstaMember.increaseLikesCount(fromInstaMember.getGender(), likeablePerson.getAttractiveTypeCode());
+
+        //읽지 않은 알람 1 추가
+        toInstaMember.increaseUnreadNotificationCount();
     }
 
     public void eventModifiedAttractiveType(LikeablePerson likeablePerson, int oldAttractiveTypeCode, int newAttractiveTypeCode){
@@ -172,6 +175,13 @@ public class InstaMemberService {
 
         toInstaMember.increaseLikesCount(fromInstaMember.getGender(), newAttractiveTypeCode);
         toInstaMember.decreaseLikesCount(fromInstaMember.getGender(), oldAttractiveTypeCode);
+
+        //읽지 않은 알람 1 추가
+        toInstaMember.increaseUnreadNotificationCount();
+    }
+
+    public void clearUnreadNotification(InstaMember instaMember) {
+        instaMember.clearUnreadNotificationCount();
     }
 
     @Transactional

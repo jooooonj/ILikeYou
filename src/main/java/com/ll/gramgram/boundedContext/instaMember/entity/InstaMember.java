@@ -3,6 +3,7 @@ package com.ll.gramgram.boundedContext.instaMember.entity;
 import com.ll.gramgram.base.baseEntity.BaseEntity;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.member.entity.Member;
+import com.ll.gramgram.boundedContext.notification.entity.Notification;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -47,6 +48,15 @@ public class InstaMember extends InstaMemberBase {
     @LazyCollection(LazyCollectionOption.EXTRA)
     @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
     private List<LikeablePerson> toLikeablePeople = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toInstaMember", cascade = {CascadeType.ALL})
+    @OrderBy("id desc") // 정렬
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
+    private List<Notification> notifications = new ArrayList<>();
+
+    @Builder.Default
+    private int unreadNotificationCount = 0;
 
     @OneToMany(mappedBy = "instaMember", cascade = {CascadeType.ALL})
     @OrderBy("id desc") // 정렬
@@ -108,6 +118,15 @@ public class InstaMember extends InstaMemberBase {
         return true;
     }
 
+    public void increaseUnreadNotificationCount(){
+        unreadNotificationCount++;
+    }
+
+    public void clearUnreadNotificationCount(){
+        unreadNotificationCount = 0;
+    }
+
+
     public void increaseLikesCount(String gender, int attractiveTypeCode) {
         if (gender.equals("W") && attractiveTypeCode == 1) likesCountByWomanAndAttractiveTypeCode1++;
         if (gender.equals("W") && attractiveTypeCode == 2) likesCountByWomanAndAttractiveTypeCode2++;
@@ -144,5 +163,9 @@ public class InstaMember extends InstaMemberBase {
                 .build();
 
         instaMemberSnapshots.add(instaMemberSnapshot);
+    }
+
+    public boolean hasUnreadMessage(){
+        return unreadNotificationCount>0;
     }
 }

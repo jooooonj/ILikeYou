@@ -23,6 +23,7 @@ public class InstaMemberEventListener {
     public void listen(EventAddLike event) {
         instaMemberService.eventLiked(event.getLikeablePerson());
     }
+
     @EventListener
     public void listen(EventModifiedAttractiveType event) {
         instaMemberService.eventModifiedAttractiveType(event.getLikeablePerson(), event.getOldAttractiveTypeCode(), event.getNewAttractiveTypeCode());

@@ -1,6 +1,7 @@
 package com.ll.gramgram.boundedContext.notification.service;
 
 import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
+import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.notification.entity.Notification;
 import com.ll.gramgram.boundedContext.notification.entity.NotificationType;
@@ -19,6 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class NotificationService {
     private final NotificationRepository notificationRepository;
+    private final InstaMemberService instaMemberService;
 
     @Transactional
     public List<Notification> getNotificationsAfterSetTimeLapse(InstaMember toInstaMember) {
@@ -32,6 +34,7 @@ public class NotificationService {
         return notificationRepository.findByToInstaMember(toInstaMember);
     }
 
+
     public void setReadDate(Notification notification){
         if(notification.getReadDate()==null)
             notification.setReadDate(LocalDateTime.now());
@@ -43,8 +46,7 @@ public class NotificationService {
         }
     }
 
-
-
+    @Transactional
     public void afterAddLike(LikeablePerson likeablePerson) {
         Notification notification = Notification
                 .builder()
@@ -57,6 +59,7 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    @Transactional
     public void afterModifyLike(LikeablePerson likeablePerson, int oldAttractiveTypeCode, int newAttractiveTypeCode) {
         Notification notification = Notification
                 .builder()
@@ -68,6 +71,11 @@ public class NotificationService {
                 .build();
 
         notificationRepository.save(notification);
+    }
+
+    @Transactional
+    public void clearUnreadNotification(InstaMember instaMember) {
+        instaMemberService.clearUnreadNotification(instaMember);
     }
 
     public class Time {

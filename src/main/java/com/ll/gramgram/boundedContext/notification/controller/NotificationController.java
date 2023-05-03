@@ -34,6 +34,9 @@ public class NotificationController {
             notificationService.setReadDate(notification);
         }
 
+        //읽지 않은 알람 0으로 초기화
+        notificationService.clearUnreadNotification(rq.getMember().getInstaMember());
+
         model.addAttribute("notifications", notifications);
         return "usr/notification/list";
     }

@@ -57,4 +57,8 @@ public class Notification extends BaseEntity {
             default -> "능력";
         };
     }
+
+    public boolean isRead(){
+        return readDate!=null;
+    }
 }
