@@ -34,7 +34,7 @@ public class NotificationServiceTests {
         Member memberUser5ByKakao = memberService.findByUsername("KAKAO__2733211417").orElseThrow();
 
         List<Notification> notifications = notificationService.findByToInstaMember(memberUser5ByKakao.getInstaMember());
-        assertThat(notifications.size()).isEqualTo(1);
+        assertThat(notifications.size()).isEqualTo(2);
     }
 
     @Test
