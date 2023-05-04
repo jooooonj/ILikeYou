@@ -273,7 +273,11 @@
 
                     <div class="mt-4">
                         <div>
-                            <i class="fa-regular fa-face-laugh-beam"></i> 호감표시자
+                            <i class="fa-regular fa-face-laugh-beam"></i>호감표시자 성별
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge badge-primary"
+                                  th:text="${likeablePerson.fromInstaMember.genderDisplayName}"></span>
                         </div>
 
                     </div>
@@ -281,24 +285,30 @@
                     <div class="mt-4">
                         <div>
                             <i class="fa-regular fa-clock"></i>
-                            호감표시
+                            호감표시 날짜
                         </div>
                         <div class="mt-2">
                             <span class="badge badge-primary"
                                   th:text="${#temporals.format(likeablePerson.createDate, 'yy.MM.dd HH:mm')}"></span>
                         </div>
                     </div>
-
-                    <div class="mt-4">
-                        <div>
-                            <i class="fa-solid fa-person-half-dress"></i> 성별
-                        </div>
-                    </div>
-
                     <div class="mt-4">
                         <div>
                             <i class="fa-solid fa-check"></i>
-                            호감사유
+                            호감 사유
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge badge-primary"
+                                  th:text="${likeablePerson.attractiveTypeDisplayName}"></span>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div>
+                            <i class="fa-solid fa-check"></i>
+                            호감 메시지
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge badge-primary">개발 예정</span>
                         </div>
                     </div>
                 </div>
