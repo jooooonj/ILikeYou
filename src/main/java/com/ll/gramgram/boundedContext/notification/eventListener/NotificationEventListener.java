@@ -13,11 +13,6 @@ public class NotificationEventListener {
 
     private final NotificationService notificationService;
 
-//    @EventListener
-//    public void listen(EventCanceledLike event) {
-//        instaMemberService.eventCanceledLike(event.getLikeablePerson());
-//    }
-
     @EventListener
     public void listen(EventAddLike event) {
         notificationService.afterAddLike(event.getLikeablePerson());
