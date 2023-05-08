@@ -26,23 +26,39 @@
                         </a>
                         <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
                     </li>
-                    <li th:if="${@rq.login}"><a href="/usr/member/me"><i class="fa-solid fa-user"></i> 내 정보</a></li>
-                    <li th:if="${@rq.login}"><a href="/usr/likeablePerson/like"><i
-                            class="fa-solid fa-heart-circle-plus"></i> 호감표시</a></li>
-                    <li th:if="${@rq.login}"><a href="/usr/likeablePerson/list"><i class="fa-solid fa-list-ol"></i>
-                        호감목록</a>
+                    <li>
+                        <a href="/usr/home/about">
+                            <i class="fa-solid fa-heart"></i>
+                            그램그램이란?
+                        </a>
+                    </li>
+                    <li th:if="${@rq.login}">
+                        <a href="/usr/member/me">
+                            <i class="fa-solid fa-user"></i> 내 정보
+                        </a>
+                    </li>
+                    <li th:if="${@rq.login}">
+                        <a href="/usr/likeablePerson/toList">
+                            <i class="fa-solid fa-star"></i>
+                            내인기
+                        </a>
+                    </li>
+                    <li th:if="${@rq.login}">
+                        <a href="/usr/likeablePerson/like">
+                            <i class="fa-solid fa-heart-circle-plus"></i>
+                            호감표시
+                        </a>
+                    </li>
+                    <li th:if="${@rq.login}">
+                        <a href="/usr/likeablePerson/list">
+                            <i class="fa-solid fa-list-ol"></i>
+                            호감목록
+                        </a>
                     </li>
                     <li th:if="${@rq.login}" th:unless="${@rq.member.hasConnectedInstaMember}">
                         <a href="/usr/instaMember/connectByApi">
                             <i class="fa-brands fa-instagram"></i>
                             인스타 아이디 입력
-                        </a>
-                    </li>
-                    <li><a href="/usr/home/about"><i class="fa-solid fa-heart"></i> 그램그램이란?</a>
-                    </li>
-                    <li th:if="${@rq.login}">
-                        <a href="/usr/likeablePerson/toList">
-                            내인기
                         </a>
                     </li>
                 </ul>
@@ -60,6 +76,9 @@
             </a>
         </div>
         <div class="navbar-end">
+            <a href="/usr/member/pop" class="btn btn-ghost gap-1" th:if="${@rq.login}">
+                <i class="fa-solid fa-chart-line"></i>
+            </a>
             <a href="/usr/notification/list" class="btn btn-ghost btn-circle">
                 <div class="indicator">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
