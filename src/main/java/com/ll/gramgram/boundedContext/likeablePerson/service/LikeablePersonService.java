@@ -15,7 +15,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -183,4 +186,44 @@ public class LikeablePersonService {
 
         return RsData.of("S-1", "호감 표시 수정이 가능합니다.");
     }
+
+    public List<LikeablePerson> findByIdByCondition(InstaMember instaMember, String gender, Integer attractiveTypeCode, int sortCode) {
+        Long instaMemberId = instaMember.getId();
+
+        if (StringUtils.isEmpty(gender))
+            gender = null;
+
+        if (attractiveTypeCode==0)
+            attractiveTypeCode = null;
+
+        System.out.println("gender : " + gender+" attractiveCode : " +attractiveTypeCode);
+        List<LikeablePerson> likeablePeople = likeablePersonRepository.findByIdByCondition(instaMemberId, gender, attractiveTypeCode);
+
+//        Comparator<LikeablePerson> sortStandard = getSortStandard(sortCode);
+//        Collections.sort(likeablePeople, sortStandard);
+        return likeablePeople;
+    }
+
+//    private Comparator<LikeablePerson> getSortStandard(int sortCode) {
+//        switch (sortCode){
+//            case 1:
+//                return new Comparator<LikeablePerson>() {
+//                    @Override
+//                    public int compare(LikeablePerson o1, LikeablePerson o2) {
+//                        return o1.getCreateDate()
+//                    }
+//                }
+//            case 2:
+//                break;
+//            case 3:
+//                break;
+//            case 4:
+//                break;
+//            case 5:
+//                break;
+//            default:
+//                break;
+//        }
+//
+//    }
 }
