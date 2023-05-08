@@ -96,6 +96,14 @@ public class InstaMember extends InstaMemberBase {
             default -> "남성";
         };
     }
+
+    public String getGenderDisplayNameWithIcon() {
+        return switch (gender) {
+            case "W" -> "<i class=\"fa-solid fa-person-dress\"></i>";
+            default -> "<i class=\"fa-solid fa-person\"></i>";
+        } + "&nbsp;" + getGenderDisplayName();
+    }
+
     public boolean updateGender(String gender) {
         if (gender.equals(this.gender)) return false;
 

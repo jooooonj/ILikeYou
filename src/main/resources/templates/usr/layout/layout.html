@@ -40,6 +40,11 @@
                     </li>
                     <li><a href="/usr/home/about"><i class="fa-solid fa-heart"></i> 그램그램이란?</a>
                     </li>
+                    <li th:if="${@rq.login}">
+                        <a href="/usr/likeablePerson/toList">
+                            내인기
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
