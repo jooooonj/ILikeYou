@@ -2,7 +2,7 @@ package com.ll.gramgram.boundedContext.instaMember.eventListener;
 
 import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
 import com.ll.gramgram.event.EventCanceledLike;
-import com.ll.gramgram.event.EventLiked;
+import com.ll.gramgram.event.EventAddLike;
 import com.ll.gramgram.event.EventModifiedAttractiveType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -20,9 +20,10 @@ public class InstaMemberEventListener {
     }
 
     @EventListener
-    public void listen(EventLiked event) {
+    public void listen(EventAddLike event) {
         instaMemberService.eventLiked(event.getLikeablePerson());
     }
+
     @EventListener
     public void listen(EventModifiedAttractiveType event) {
         instaMemberService.eventModifiedAttractiveType(event.getLikeablePerson(), event.getOldAttractiveTypeCode(), event.getNewAttractiveTypeCode());

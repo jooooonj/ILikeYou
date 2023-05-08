@@ -18,6 +18,7 @@ public class LikeablePerson extends BaseEntity {
 
     private LocalDateTime modifyUnlockDate;
 
+
     @ManyToOne
     @ToString.Exclude
     private InstaMember fromInstaMember; // 호감을 표시한 사람(인스타 멤버)
@@ -34,7 +35,18 @@ public class LikeablePerson extends BaseEntity {
     }
 
     public String getModifyUnlockDateRemainStrHuman() {
-        return "2시간 16분";
+        LocalDateTime tmpDateTime = modifyUnlockDate;
+        int second = tmpDateTime.getSecond();
+
+        if (second != 0) {
+            int nanos = tmpDateTime.getNano();
+            int roundedNanos = (int) Math.round(nanos / 1e9) * 999_999_999;
+            tmpDateTime = tmpDateTime.withSecond(0).withNano(0).plusMinutes(1).withSecond(0).withNano(roundedNanos);
+        }
+
+        int hour = tmpDateTime.getHour();
+        int minute = tmpDateTime.getMinute();
+        return String.format("%d시 %d분", hour, minute);
     }
 
     public void modifyAttractiveTypeCode(int attractiveTypeCode) {
