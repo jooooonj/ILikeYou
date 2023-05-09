@@ -12,7 +12,9 @@ import com.ll.gramgram.event.EventAddLike;
 import com.ll.gramgram.event.EventModifiedAttractiveType;
 import com.ll.gramgram.standard.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -196,34 +198,26 @@ public class LikeablePersonService {
         if (attractiveTypeCode==0)
             attractiveTypeCode = null;
 
-        System.out.println("gender : " + gender+" attractiveCode : " +attractiveTypeCode);
-        List<LikeablePerson> likeablePeople = likeablePersonRepository.findByIdByCondition(instaMemberId, gender, attractiveTypeCode);
+        List<LikeablePerson> likeablePeople = findByIdByConditionOrderBy(sortCode, instaMemberId, gender, attractiveTypeCode);
 
-//        Comparator<LikeablePerson> sortStandard = getSortStandard(sortCode);
-//        Collections.sort(likeablePeople, sortStandard);
         return likeablePeople;
     }
 
-//    private Comparator<LikeablePerson> getSortStandard(int sortCode) {
-//        switch (sortCode){
-//            case 1:
-//                return new Comparator<LikeablePerson>() {
-//                    @Override
-//                    public int compare(LikeablePerson o1, LikeablePerson o2) {
-//                        return o1.getCreateDate()
-//                    }
-//                }
-//            case 2:
-//                break;
-//            case 3:
-//                break;
-//            case 4:
-//                break;
-//            case 5:
-//                break;
-//            default:
-//                break;
-//        }
-//
-//    }
+    //정렬 코드에 따라서 정렬된 결과를 반환
+    private List<LikeablePerson> findByIdByConditionOrderBy(int sortCode, Long instaMemberId, String gender, Integer attractiveTypeCode) {
+        switch (sortCode) {
+            case 1:
+                return likeablePersonRepository.findByIdByConditionOrderByCreateDateDesc(instaMemberId, gender, attractiveTypeCode);
+            case 2:
+                return likeablePersonRepository.findByIdByConditionOrderByHotOfFromInstaMember(instaMemberId, gender, attractiveTypeCode);
+            case 3:
+                return likeablePersonRepository.findByIdByConditionOrderByHotOfFromInstaMemberDesc(instaMemberId, gender, attractiveTypeCode);
+            case 4:
+                return likeablePersonRepository.findByIdByConditionOrderByGenderOfFromInstaMember(instaMemberId, gender, attractiveTypeCode);
+            case 5:
+                return likeablePersonRepository.findByIdByConditionOrderByAttractiveTypeCode(instaMemberId, gender, attractiveTypeCode);
+            default:
+                return likeablePersonRepository.findByIdByConditionOrderByCreateDate(instaMemberId, gender, attractiveTypeCode);
+        }
+    }
 }
