@@ -222,20 +222,5 @@ public class LikeablePersonControllerTests {
         ;
     }
 
-//    @Test
-//    @DisplayName("수정 폼")
-//    @WithUserDetails("user3")
-//    void t011() throws Exception {
-//        // WHEN
-//        ResultActions resultActions = mvc
-//                .perform(get("/usr/likeablePerson/modify/2"))
-//                .andDo(print());
-//
-//        // THEN
-//        resultActions
-//                .andExpect(handler().handlerType(LikeablePersonController.class))
-//                .andExpect(handler().methodName("showModify"))
-//                .andExpect(status().is2xxSuccessful())
-//        ;
-//    }
+
 }

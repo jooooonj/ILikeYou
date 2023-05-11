@@ -12,10 +12,15 @@ import com.ll.gramgram.event.EventAddLike;
 import com.ll.gramgram.event.EventModifiedAttractiveType;
 import com.ll.gramgram.standard.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -182,5 +187,37 @@ public class LikeablePersonService {
             return RsData.of("F-3", "쿨타임으로 인해 수정이 불가능합니다.");
 
         return RsData.of("S-1", "호감 표시 수정이 가능합니다.");
+    }
+
+    public List<LikeablePerson> findByIdByCondition(InstaMember instaMember, String gender, Integer attractiveTypeCode, int sortCode) {
+        Long instaMemberId = instaMember.getId();
+
+        if (StringUtils.isEmpty(gender))
+            gender = null;
+
+        if (attractiveTypeCode==0)
+            attractiveTypeCode = null;
+
+        List<LikeablePerson> likeablePeople = findByIdByConditionOrderBy(sortCode, instaMemberId, gender, attractiveTypeCode);
+
+        return likeablePeople;
+    }
+
+    //정렬 코드에 따라서 정렬된 결과를 반환
+    private List<LikeablePerson> findByIdByConditionOrderBy(int sortCode, Long instaMemberId, String gender, Integer attractiveTypeCode) {
+        switch (sortCode) {
+            case 1:
+                return likeablePersonRepository.findByIdByConditionOrderByCreateDateDesc(instaMemberId, gender, attractiveTypeCode);
+            case 2:
+                return likeablePersonRepository.findByIdByConditionOrderByHotOfFromInstaMember(instaMemberId, gender, attractiveTypeCode);
+            case 3:
+                return likeablePersonRepository.findByIdByConditionOrderByHotOfFromInstaMemberDesc(instaMemberId, gender, attractiveTypeCode);
+            case 4:
+                return likeablePersonRepository.findByIdByConditionOrderByGenderOfFromInstaMember(instaMemberId, gender, attractiveTypeCode);
+            case 5:
+                return likeablePersonRepository.findByIdByConditionOrderByAttractiveTypeCode(instaMemberId, gender, attractiveTypeCode);
+            default:
+                return likeablePersonRepository.findByIdByConditionOrderByCreateDate(instaMemberId, gender, attractiveTypeCode);
+        }
     }
 }

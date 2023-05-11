@@ -36,13 +36,7 @@
                                 <option value="M">남성</option>
                                 <option value="W">여성</option>
                             </select>
-                            <script>
-                                if (params.gender) {
-                                    $(`select[name="gender"]:last`).val(params.gender[0]);
-                                }
-                            </script>
                         </div>
-
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">
@@ -57,11 +51,6 @@
                                 <option value="2">성격</option>
                                 <option value="3">능력</option>
                             </select>
-                            <script>
-                                if (params.attractiveTypeCode) {
-                                    $(`select[name="attractiveTypeCode"]:last`).val(params.attractiveTypeCode[0]);
-                                }
-                            </script>
                         </div>
 
                         <div class="form-control">
@@ -73,18 +62,13 @@
                             </label>
                             <select name="sortCode" class="select select-bordered w-full"
                                     onchange="$(this).closest('form').submit();">
-                                <option value="1">최신순</option>
-                                <option value="2">날짜순</option>
-                                <option value="3">인기 많은 순</option>
-                                <option value="4">인기 적은 순</option>
-                                <option value="5">성별순</option>
-                                <option value="6">호감사유순</option>
+                                <option value="">최신순</option>
+                                <option value="1">오래된순</option>
+                                <option value="2">인기 많은 순</option>
+                                <option value="3">인기 적은 순</option>
+                                <option value="4">성별순</option>
+                                <option value="5">호감사유순</option>
                             </select>
-                            <script>
-                                if (params.sortCode) {
-                                    $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
-                                }
-                            </script>
                         </div>
                     </form>
                 </div>
@@ -154,6 +138,19 @@
             </a>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            // URL에서 쿼리 파라미터 값을 읽어옴
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedGender = urlParams.get('gender');
+            const selectedAttractiveTypeCode = urlParams.get('attractiveTypeCode')
+            const selectedSortCode = urlParams.get('sortCode')
+            // 드롭다운 메뉴에서 선택된 값으로 설정
+            $('select[name="gender"]').val(selectedGender);
+            $('select[name="attractiveTypeCode"]').val(selectedAttractiveTypeCode);
+            $('select[name="sortCode"]').val(selectedSortCode);
+        });
+    </script>
 </main>
 </body>
 
