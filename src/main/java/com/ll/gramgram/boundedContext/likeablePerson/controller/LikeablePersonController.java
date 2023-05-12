@@ -6,17 +6,14 @@ import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
 import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
 import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
 import com.ll.gramgram.boundedContext.member.entity.Member;
-import com.nimbusds.jose.util.IntegerUtils;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -133,12 +130,14 @@ public class LikeablePersonController {
         // 인스타인증을 했는지 체크
         if (instaMember != null) {
             // 해당 인스타회원을 좋아하는 사람들 목록
-            List<LikeablePerson> likeablePeople = likeablePersonService.findByIdByCondition(instaMember ,gender, attractiveTypeCode, sortCode);
+            List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember ,gender, attractiveTypeCode, sortCode);
             model.addAttribute("likeablePeople", likeablePeople);
         }
 
         return "usr/likeablePerson/toList";
     }
+
+
 
 
 }
