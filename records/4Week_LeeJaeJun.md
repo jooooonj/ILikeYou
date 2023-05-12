@@ -24,34 +24,71 @@
 
 **[접근 방법]**
 
-네이버클라우드플랫폼을 통한 배포, 도메인, HTTPS 까지 적용
-1. nginx 관리자 페이지에서 HTTPS 적용
-2. iwantmyname에서 도메인 구매, dnszi에서 도메인 관리 (joooooj.com)
-3. 가장 최신 커밋 push 후 pull -> checkout -> build -> 도커 이미지 생성 -> 실행
+- 네이버클라우드플랫폼을 통한 배포, 도메인, HTTPS 까지 적용
+   - nginx 관리자 페이지에서 HTTPS 적용
+   - iwantmyname에서 도메인 구매, dnszi에서 도메인 관리 (joooooj.com)
+   - 가장 최신 커밋 push 후 pull -> checkout -> build -> 도커 이미지 생성 -> 실행
 
-내가 받은 호감리스트(/usr/likeablePerson/toList)에서 성별 필터링기능 구현
-&&
-내가 받은 호감리스트(/usr/likeablePerson/toList)에서 호감사유 필터링기능 구현
-1. LikeablePersonRepository에 @Query를 통해 jpql작성
-2. 우선 attractiveTypeCode와 gender 값으로 필터링해서 List를 반환 (정렬 X)
+
+- 성별 && 호감사유 필터링 
+  - LikeablePersonRepository에 쿼리메서드를 통해 jpql작성 (성별, 호감사유 필터링)
+
+    ```java
+    @Query("select L from LikeablePerson L inner join L.toInstaMember T inner join L.fromInstaMember F on T.id=:id where (:attractiveTypeCode is null or L.attractiveTypeCode=:attractiveTypeCode) and (:gender is null or F.gender=:gender) order by {정렬조건}
+    ```
+
+  - LikeablePersonController 에서는 FilterForm에 필터링 조건, 정렬 조건을 받아서 서비스계층에 전송
+      ```java
+      @PreAuthorize("isAuthenticated()")
+      @GetMapping("/toList")
+      public String showToList(Model model, FilterForm filterForm){
+
+          InstaMember instaMember = rq.getMember().getInstaMember();
+
+          // 인스타인증을 했는지 체크
+          if (instaMember != null) {
+              // 해당 인스타회원을 좋아하는 사람들 목록
+              List<LikeablePerson> likeablePeople =
+                      likeablePersonService.findByIdFilteredAndSortedList(instaMember ,filterForm.gender, filterForm.attractiveTypeCode, filterForm.sortCode);
+              model.addAttribute("likeablePeople", likeablePeople);
+          }
+
+          return "usr/likeablePerson/toList";
+      }
+    ```
+
+- 정렬
+    - 필터링과 같이 파라미터로 동적인 정렬을 구현하려고 했다. (실패)
+    - 정렬코드 수대로 쿼리메서드 구현 (코드중복)
+    ```java
+    private List<LikeablePerson> findByIdFilteredAndSortedList(Long instaMemberId, int sortCode, String gender, Integer attractiveTypeCode) {
+        switch (sortCode) {
+            case 1:
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByCreateDateDesc(instaMemberId, gender, attractiveTypeCode);
+            case 2:
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByHotOfFromInstaMemberAsc(instaMemberId, gender, attractiveTypeCode);
+            case 3:
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByHotOfFromInstaMemberDesc(instaMemberId, gender, attractiveTypeCode);
+            case 4:
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByGenderOfFromInstaMemberAsc(instaMemberId, gender, attractiveTypeCode);
+            case 5:
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByAttractiveTypeCodeAsc(instaMemberId, gender, attractiveTypeCode);
+            default:
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByCreateDateAsc(instaMemberId, gender, attractiveTypeCode);
+        }
+    }
+    ```
 ---
 
-내가 받은 호감리스트(/usr/likeablePerson/toList)에서 정렬기능
-1. 처음엔 필터링과 같이 파라미터로 동적인 정렬을 구현하려고 했다.
-2. 실패하고, 동적으로 필터링된 결과값에 정렬코드 수대로 쿼리메서드 구현 (중복이 발생했다..)
----
-
-젠킨스를 통해서 리포지터리의 main 브랜치에 커밋 이벤트가 발생하면 자동으로 배포가 진행되도록
-1. 젠킨스의 작동 원리를 이해해야 했다.
-2. 도커 컨테이너에 대해 이해가 필요했다.
-3. IP와 port에 대해서 이해하고 데이터의 송수신에 집중해서 분석이 필요했다.
-4. 큰 틀은 리눅스서버 -> 도커 컨테이너 (jenkins, sql, gram, npm) 이 띄어져 있고,
-서버의 접근권한(ACG)는 80,443(일반 npm 접근), 81(관리자 접근) 포트가 열려있다. 그래서 사용자는 npm에게
-미리 설정해놓은 접근 도메인을 통해 리다이렉트 포트를 식별하여 포트포워딩된 컨테이너에 접근할 수 있게 된다.
-git과 jenkins는 이미 만들어져 있는 web hook이라는 기술을 통해 git에서 커밋 이벤트가 발생할시 설정해놓은 URL로
-신호를 보낼 수 있었고 신호를 받은 npm은 url을 보고 jenkins에게 전달해줄 수 있다.
-jenkins에서도 미리 git commit 이벤트가 발생했을 때 git pull, build, run 이라는 커멘드를 자동 입력하게 하여
-기존에 개발자가 하던 작업을 손쉽게 할 수 있었다.
+- 젠킨스 자동배포
+    - 젠킨스의 작동 원리 공부
+    - 도커 컨테이너 공부
+    - IP와 port에 대한 이해
+    - 큰 틀 : 리눅스서버 -> 도커 컨테이너 (jenkins, sql, gram, npm)
+    - 서버의 접근권한(ACG) : 80,443(일반 npm 접근), 81(관리자 접근) 포트 (NPM에만 접근 가능)
+    - NPM에서 설정해놓은 URL 통해 리다이렉트 포트를 식별하여 컨테이너에 접근
+    - git과 jenkins web hook을 통해 커밋 이벤트 처리 (젠킨스 URL + /github/webhook)
+    - Jenkins 커밋 이벤트를 받았을시 자동 실행할 쉘 명령어 등록 (파이프라인)
 ---
 
 **[특이사항]**

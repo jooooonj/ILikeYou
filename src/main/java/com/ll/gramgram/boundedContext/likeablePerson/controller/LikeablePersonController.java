@@ -11,6 +11,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -121,20 +122,26 @@ public class LikeablePersonController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/toList")
-    public String showToList(Model model, @RequestParam(value = "gender", defaultValue = "") String gender,
-                             @RequestParam(value = "attractiveTypeCode", defaultValue = "0") Integer attractiveTypeCode,
-                             @RequestParam(value= "sortCode", defaultValue = "0") int sortCode){
+    public String showToList(Model model, FilterForm filterForm){
 
         InstaMember instaMember = rq.getMember().getInstaMember();
 
         // 인스타인증을 했는지 체크
         if (instaMember != null) {
             // 해당 인스타회원을 좋아하는 사람들 목록
-            List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember ,gender, attractiveTypeCode, sortCode);
+            List<LikeablePerson> likeablePeople =
+                    likeablePersonService.findByIdFilteredAndSortedList(instaMember ,filterForm.gender, filterForm.attractiveTypeCode, filterForm.sortCode);
             model.addAttribute("likeablePeople", likeablePeople);
         }
 
         return "usr/likeablePerson/toList";
+    }
+
+    @Setter
+    private class FilterForm{
+        String gender;
+        Integer attractiveTypeCode;
+        int sortCode = 0;
     }
 
 

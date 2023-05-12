@@ -187,13 +187,6 @@ public class LikeablePersonService {
 
     public List<LikeablePerson> findByIdFilteredAndSortedList(InstaMember instaMember, String gender, Integer attractiveTypeCode, int sortCode) {
         Long instaMemberId = instaMember.getId();
-
-        if (StringUtils.isEmpty(gender))
-            gender = null;
-
-        if (attractiveTypeCode==0)
-            attractiveTypeCode = null;
-
         return findByIdFilteredAndSortedList(instaMemberId, sortCode, gender, attractiveTypeCode);
     }
 
@@ -201,17 +194,17 @@ public class LikeablePersonService {
     private List<LikeablePerson> findByIdFilteredAndSortedList(Long instaMemberId, int sortCode, String gender, Integer attractiveTypeCode) {
         switch (sortCode) {
             case 1:
-                return likeablePersonRepository.findByIdByConditionOrderByCreateDateDesc(instaMemberId, gender, attractiveTypeCode);
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByCreateDateDesc(instaMemberId, gender, attractiveTypeCode);
             case 2:
-                return likeablePersonRepository.findByIdByConditionOrderByHotOfFromInstaMember(instaMemberId, gender, attractiveTypeCode);
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByHotOfFromInstaMemberAsc(instaMemberId, gender, attractiveTypeCode);
             case 3:
-                return likeablePersonRepository.findByIdByConditionOrderByHotOfFromInstaMemberDesc(instaMemberId, gender, attractiveTypeCode);
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByHotOfFromInstaMemberDesc(instaMemberId, gender, attractiveTypeCode);
             case 4:
-                return likeablePersonRepository.findByIdByConditionOrderByGenderOfFromInstaMember(instaMemberId, gender, attractiveTypeCode);
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByGenderOfFromInstaMemberAsc(instaMemberId, gender, attractiveTypeCode);
             case 5:
-                return likeablePersonRepository.findByIdByConditionOrderByAttractiveTypeCode(instaMemberId, gender, attractiveTypeCode);
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByAttractiveTypeCodeAsc(instaMemberId, gender, attractiveTypeCode);
             default:
-                return likeablePersonRepository.findByIdByConditionOrderByCreateDate(instaMemberId, gender, attractiveTypeCode);
+                return likeablePersonRepository.findByIdFilteredAndSortedOrderByCreateDateAsc(instaMemberId, gender, attractiveTypeCode);
         }
     }
 }
