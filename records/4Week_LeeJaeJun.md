@@ -89,6 +89,129 @@
     - NPM에서 설정해놓은 URL 통해 리다이렉트 포트를 식별하여 컨테이너에 접근
     - git과 jenkins web hook을 통해 커밋 이벤트 처리 (젠킨스 URL + /github/webhook)
     - Jenkins 커밋 이벤트를 받았을시 자동 실행할 쉘 명령어 등록 (파이프라인)
+
+    - 파이프라인 코드
+    ```shell
+    pipeline {
+    agent any
+    
+    tools {
+        jdk 'openjdk-17-jdk'
+    }
+    
+    stages {
+        stage('Prepare') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/jooooonj/Mission_LeeJaeJun'
+            }
+            
+            post {
+                success { 
+                    sh 'echo "Successfully Cloned Repository"'
+                }
+                failure {
+                    sh 'echo "Fail Cloned Repository"'
+                }
+            }    
+        }
+        
+        stage('Build Gradle Test') {
+            
+            steps {
+                sh (script:'''
+                    echo "Build Gradle Test Start"
+                ''')
+
+                dir('.') {
+                    sh """
+                    chmod +x gradlew
+                    """
+                }
+                
+                dir('.') {
+                    sh """
+                    ./gradlew clean build
+                    """
+                }
+            }
+            
+            post {
+                success { 
+                    sh 'echo "Successfully Build Gradle Test"'
+                }
+                 failure {
+                    sh 'echo "Fail Build Gradle Test"'
+                }
+            }    
+        }
+        
+        stage('Docker Rm') {
+            steps {
+                sh 'echo "Docker Run Start"'
+                sh """
+                docker stop gram_1
+                docker rm -f gram_1
+                docker rmi -f gram
+                """
+            }
+            
+            post {
+                success { 
+                    sh 'echo "Docker Rm Success"'
+                }
+                failure {
+                    sh 'echo "Docker Rm Fail"'
+                }
+            }
+        }
+        
+        stage('Bulid Docker Image') {
+            steps {
+                sh 'echo " Image Bulid Start"'
+                sh """
+                docker build -t gram .
+                """
+            }
+            
+            post {
+                success {
+                    sh 'echo "Bulid Docker Image Success"'
+                }
+
+                failure {
+                    sh 'echo "Bulid Docker Image Fail"'
+                }
+            }
+        }
+        
+        stage('Docker Run') {
+            steps {
+                sh 'echo "Docker Run Start"'
+                sh """
+                docker run \
+                  --name=gram_1 \
+                  -p 8080:8080 \
+                  --restart unless-stopped \
+                  -e TZ=Asia/Seoul \
+                  -d \
+                  gram
+                """
+            }
+            
+            post {
+                success {
+                    sh 'echo "Docker Run Success"'
+                }
+
+                failure {
+                    sh 'echo "Docker Run Fail"'
+                }
+            }
+        }
+    }
+}
+    ```
 ---
 
 **[특이사항]**
