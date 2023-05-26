@@ -111,7 +111,7 @@ public class LikeablePersonServiceTests {
 
         InstaMember instaMember = instaMemberService.findById(4);
 
-        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, null, 0);
+        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 0);
         //전체라서 두 개 나와야 한다.
         assertThat(likeablePeople.size()).isEqualTo(2);
     }
@@ -123,7 +123,7 @@ public class LikeablePersonServiceTests {
 
         InstaMember instaMember = instaMemberService.findById(4);
 
-        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "M", null, 0);
+        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "M", 0, 0);
         //성별 남성은 한개다.
         assertThat(likeablePeople.size()).isEqualTo(1);
     }
@@ -148,10 +148,10 @@ public class LikeablePersonServiceTests {
         InstaMember instaMember = instaMemberService.findById(4);
 
         //최신순
-        List<LikeablePerson> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, null, 0);
+        List<LikeablePerson> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 0);
         LikeablePerson likeablePersonOrderByAsc = likeablePeopleOrderByAsc.get(0);
         //오래된순
-        List<LikeablePerson> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, null, 1);
+        List<LikeablePerson> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 1);
         LikeablePerson likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
 
         assertThat(likeablePersonOrderByAsc.getId()==likeablePersonOrderByDesc.getId()).isEqualTo(true);
@@ -164,10 +164,10 @@ public class LikeablePersonServiceTests {
         InstaMember instaMember = instaMemberService.findById(4);
 
         //인기많은순
-        List<LikeablePerson> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, null, 2);
+        List<LikeablePerson> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 2);
         LikeablePerson likeablePersonOrderByAsc = likeablePeopleOrderByAsc.get(0);
         //인기적은순
-        List<LikeablePerson> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, null, 3);
+        List<LikeablePerson> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 3);
         LikeablePerson likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
 
         assertThat(likeablePersonOrderByAsc.getId()==likeablePersonOrderByDesc.getId()).isEqualTo(true);

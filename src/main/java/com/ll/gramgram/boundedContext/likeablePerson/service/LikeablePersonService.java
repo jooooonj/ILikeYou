@@ -13,6 +13,7 @@ import com.ll.gramgram.event.EventModifiedAttractiveType;
 import com.ll.gramgram.standard.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -187,6 +188,13 @@ public class LikeablePersonService {
 
     public List<LikeablePerson> findByIdFilteredAndSortedList(InstaMember instaMember, String gender, Integer attractiveTypeCode, int sortCode) {
         Long instaMemberId = instaMember.getId();
+
+        if (StringUtils.isEmpty(gender))
+            gender = null;
+
+        if (attractiveTypeCode==0)
+            attractiveTypeCode = null;
+
         return findByIdFilteredAndSortedList(instaMemberId, sortCode, gender, attractiveTypeCode);
     }
 

@@ -122,15 +122,16 @@ public class LikeablePersonController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/toList")
-    public String showToList(Model model, FilterForm filterForm){
+    public String showToList(Model model, @RequestParam(value = "gender", defaultValue = "") String gender,
+                             @RequestParam(value = "attractiveTypeCode", defaultValue = "0") Integer attractiveTypeCode,
+                             @RequestParam(value= "sortCode", defaultValue = "0") int sortCode){
 
         InstaMember instaMember = rq.getMember().getInstaMember();
 
         // 인스타인증을 했는지 체크
         if (instaMember != null) {
             // 해당 인스타회원을 좋아하는 사람들 목록
-            List<LikeablePerson> likeablePeople =
-                    likeablePersonService.findByIdFilteredAndSortedList(instaMember ,filterForm.gender, filterForm.attractiveTypeCode, filterForm.sortCode);
+            List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember ,gender, attractiveTypeCode, sortCode);
             model.addAttribute("likeablePeople", likeablePeople);
         }
 
@@ -138,13 +139,10 @@ public class LikeablePersonController {
     }
 
     @Setter
-    private class FilterForm{
-        String gender;
-        Integer attractiveTypeCode;
-        int sortCode = 0;
+    public static class FilterForm {
+        private String gender = "";
+        private int attractiveTypeCode = 0;
+        private int sortCode = 1;
     }
-
-
-
 
 }
