@@ -20,4 +20,4 @@ logging:
     org.hibernate.orm.jdbc.extract: INFO
 custom:
   site:
-    baseUrl: http://49.50.161.221:8080
+    baseUrl: http://101.101.209.204:8080
