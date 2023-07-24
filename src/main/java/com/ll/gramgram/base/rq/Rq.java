@@ -1,9 +1,9 @@
 package com.ll.gramgram.base.rq;
 
 import com.ll.gramgram.base.rsData.RsData;
-import com.ll.gramgram.boundedContext.member.entity.Member;
-import com.ll.gramgram.boundedContext.member.service.MemberService;
-import com.ll.gramgram.standard.util.Ut;
+import com.ll.gramgram.domain.member.entity.Member;
+import com.ll.gramgram.domain.member.service.MemberService;
+import com.ll.gramgram.global.util.Ut;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

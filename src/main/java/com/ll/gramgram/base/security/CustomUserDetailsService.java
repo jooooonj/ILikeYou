@@ -1,8 +1,8 @@
 package com.ll.gramgram.base.security;
 
 
-import com.ll.gramgram.boundedContext.member.entity.Member;
-import com.ll.gramgram.boundedContext.member.repository.MemberRepository;
+import com.ll.gramgram.domain.member.entity.Member;
+import com.ll.gramgram.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

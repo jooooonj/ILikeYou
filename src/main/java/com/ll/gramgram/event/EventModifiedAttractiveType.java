@@ -1,6 +1,6 @@
 package com.ll.gramgram.event;
 
-import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
