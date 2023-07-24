@@ -1,11 +1,12 @@
-package com.ll.gramgram.boundedContext.likeablePerson.controller;
+package com.ll.gramgram.domain.likeablePerson.controller;
 
 import com.ll.gramgram.base.rq.Rq;
 import com.ll.gramgram.base.rsData.RsData;
-import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
-import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
-import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
-import com.ll.gramgram.boundedContext.member.entity.Member;
+import com.ll.gramgram.domain.instaMember.entity.InstaMember;
+import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.likeablePerson.service.LikeablePersonService;
+import com.ll.gramgram.domain.likeablePerson.validator.LikeablePersonValidator;
+import com.ll.gramgram.domain.member.entity.Member;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 public class LikeablePersonController {
     private final Rq rq;
     private final LikeablePersonService likeablePersonService;
+    private final LikeablePersonValidator likeablePersonValidator;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/like")
@@ -98,7 +100,7 @@ public class LikeablePersonController {
     public String showModify(Model model, @PathVariable("id") Long id) {
 
         LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(id);
-        RsData result = likeablePersonService.canModify(rq.getMember(), likeablePerson);
+        RsData result = likeablePersonValidator.validateModify(rq.getMember(), likeablePerson);
 
         if (result.isFail()) rq.historyBack(result);
 
@@ -111,7 +113,7 @@ public class LikeablePersonController {
     public String modify(@PathVariable("id") Long id, @Valid ModifyForm modifyForm) {
 
         LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(id);
-        RsData canModifyResult = likeablePersonService.canModify(rq.getMember(), likeablePerson);
+        RsData canModifyResult = likeablePersonValidator.validateModify(rq.getMember(), likeablePerson);
 
         if (canModifyResult.isFail()) rq.historyBack(canModifyResult);
 

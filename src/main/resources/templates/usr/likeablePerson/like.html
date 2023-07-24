@@ -64,7 +64,10 @@
 
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text">상대방 인스타 아이디</span>
+                        <span class="label-text">
+                            <i class="fa-brands fa-instagram"></i>
+                            상대방 인스타 아이디
+                        </span>
                     </label>
                     <a href="#" onclick="$(this).attr('href', $(this).text().replaceAll(' ', ''));" target="_blank"
                        class="block mb-3 text-sm break-all underline text-blue-400">
@@ -72,7 +75,7 @@
                     </a>
                     <input type="text" name="username" placeholder="인스타 아이디" class="input input-bordered" autofocus
                            onchange="$(this).keyup();"
-                           onkeyup="$(this).next().children(':last-child').text(this.value.trim());"
+                           onkeyup="$(this).prev().children(':last-child').text(this.value.trim());"
                            onpaste="setTimeoutZero(() => $(this).keyup());"/>
                     <script>
                         // input : 태그가 input 인 녀석 선택
@@ -82,6 +85,7 @@
                         $(`input[name="username"]:last`).keyup();
                     </script>
                 </div>
+
 
                 <div class="form-control">
                     <label class="label">

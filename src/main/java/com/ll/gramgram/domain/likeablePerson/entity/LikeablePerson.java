@@ -1,8 +1,8 @@
-package com.ll.gramgram.boundedContext.likeablePerson.entity;
+package com.ll.gramgram.domain.likeablePerson.entity;
 
 import com.ll.gramgram.base.baseEntity.BaseEntity;
-import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
-import com.ll.gramgram.standard.util.Ut;
+import com.ll.gramgram.domain.instaMember.entity.InstaMember;
+import com.ll.gramgram.global.util.Ut;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -18,8 +18,6 @@ import java.time.LocalDateTime;
 public class LikeablePerson extends BaseEntity {
 
     private LocalDateTime modifyUnlockDate;
-
-
     @ManyToOne
     @ToString.Exclude
     private InstaMember fromInstaMember; // 호감을 표시한 사람(인스타 멤버)

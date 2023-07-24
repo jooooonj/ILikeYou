@@ -1,10 +1,8 @@
-package com.ll.gramgram.base.appConfig;
+package com.ll.gramgram.global.config.appConfig;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Configuration

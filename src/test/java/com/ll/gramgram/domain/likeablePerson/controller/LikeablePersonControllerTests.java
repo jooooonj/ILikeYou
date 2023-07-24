@@ -1,11 +1,9 @@
-package com.ll.gramgram.boundedContext.likeablePerson.controller;
+package com.ll.gramgram.domain.likeablePerson.controller;
 
-import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
-import com.ll.gramgram.boundedContext.likeablePerson.service.LikeablePersonService;
-import com.ll.gramgram.boundedContext.member.entity.Member;
-import com.ll.gramgram.boundedContext.member.service.MemberService;
-import com.ll.gramgram.standard.exception.DataNotFoundException;
-import org.junit.jupiter.api.Assertions;
+import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.likeablePerson.service.LikeablePersonService;
+import com.ll.gramgram.domain.member.entity.Member;
+import com.ll.gramgram.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -1,12 +1,13 @@
-package com.ll.gramgram.boundedContext.likeablePerson.service;
+package com.ll.gramgram.domain.likeablePerson.service;
 
-import com.ll.gramgram.base.appConfig.AppConfig;
+import com.ll.gramgram.domain.likeablePerson.validator.LikeablePersonValidator;
+import com.ll.gramgram.global.config.appConfig.AppConfig;
 import com.ll.gramgram.base.rsData.RsData;
-import com.ll.gramgram.boundedContext.instaMember.entity.InstaMember;
-import com.ll.gramgram.boundedContext.instaMember.service.InstaMemberService;
-import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
-import com.ll.gramgram.boundedContext.member.entity.Member;
-import com.ll.gramgram.boundedContext.member.service.MemberService;
+import com.ll.gramgram.domain.instaMember.entity.InstaMember;
+import com.ll.gramgram.domain.instaMember.service.InstaMemberService;
+import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.member.entity.Member;
+import com.ll.gramgram.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ import static org.assertj.core.api.Assertions.*;
 public class LikeablePersonServiceTests {
     @Autowired
     private LikeablePersonService likeablePersonService;
+
+    @Autowired
+    private LikeablePersonValidator likeablePersonValidator;
 
     @Autowired
     private MemberService memberService;
@@ -86,7 +90,7 @@ public class LikeablePersonServiceTests {
         LikeablePerson likeablePerson = likeablePersonService.getLikeablePerson(memberUser3.getInstaMember().getId(), memberUser5ByKakao.getInstaMember().getId());
         assertThat(likeablePerson).isNotNull();
 
-        RsData rsData = likeablePersonService.canModify(memberUser3, likeablePerson);
+        RsData rsData = likeablePersonValidator.validateModify(memberUser3, likeablePerson);
         assertThat(rsData.getMsg()).isEqualTo("쿨타임으로 인해 수정이 불가능합니다.");
     }
 

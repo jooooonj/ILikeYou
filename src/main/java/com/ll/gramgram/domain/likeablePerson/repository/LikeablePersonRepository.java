@@ -1,6 +1,6 @@
-package com.ll.gramgram.boundedContext.likeablePerson.repository;
+package com.ll.gramgram.domain.likeablePerson.repository;
 
-import com.ll.gramgram.boundedContext.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
