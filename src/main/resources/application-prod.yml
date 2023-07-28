@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://172.17.0.1:3306/gram__prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: lldjlocal
-    password: 1234
+    driver-class-name: ${db.prod.driver-class-name}
+    url: ${db.prod.url}
+    username: ${db.prod.username}
+    password: ${db.prod.password:NONE}
   jpa:
     hibernate:
       ddl-auto: update
@@ -20,4 +20,4 @@ logging:
     org.hibernate.orm.jdbc.extract: INFO
 custom:
   site:
-    baseUrl: http://101.101.209.204:8080
+    baseUrl: ${custom.site.prod:NONE}

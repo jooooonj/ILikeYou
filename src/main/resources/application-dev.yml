@@ -1,10 +1,16 @@
 server:
-  port: 443
+  port: ${dev.server.port}
   ssl:
-    enabled: true
-    key-store-type: PKCS12
-    key-store-password: 123456
-    key-store: keystore.p12
+    enabled: ${dev.server.ssl.enabled}
+    key-store-type: ${dev.server.ssl.key-store-type}
+    key-store-password: ${dev.server.ssl.key-store-password}
+    key-store: ${dev.server.ssl.key-store}
+spring:
+  datasource:
+    driver-class-name: ${db.dev.driver-class-name}
+    url: ${db.dev.url}
+    username: ${db.dev.username}
+    password: ${db.dev.password:NONE}
 custom:
   site:
-    baseUrl: https://localhost
+    baseUrl: ${custom.site.dev}

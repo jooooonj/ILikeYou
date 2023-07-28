@@ -6,8 +6,6 @@ spring:
   profiles:
     include: secret
     active: dev
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
@@ -62,18 +60,9 @@ spring:
             token-uri: https://api.instagram.com/oauth/access_token
             user-info-uri: https://graph.instagram.com/me?fields=id,username&access_token={access-token}
             user-name-attribute: username
-
 logging:
   level:
     root: INFO
     com.ll.gramgram_ai: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
-custom:
-  likeablePerson:
-    modifyCoolTime: '#{60 * 60 * 3}'
-  instaMember:
-    fromLikeablePeople:
-      maxSize: 10
-  site:
-    baseUrl:
