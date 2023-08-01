@@ -76,6 +76,7 @@ public class MemberService {
         InstaMember instaMember = member.getInstaMember();
 
         member.disconnectInstaMember();
+        instaMember.disConnected();
         memberRepository.save(member);
 
         return RsData.of("S-1", "인스타계정(%s)과 연결이 헤제되었습니다. 인스타계정을 연결해주세요.".formatted(instaMember.getUsername()));
