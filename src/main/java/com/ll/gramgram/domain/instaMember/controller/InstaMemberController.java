@@ -54,14 +54,7 @@ public class InstaMemberController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")
     public String disconnect(@PathVariable("id") Long id) {
-        if (!rq.getMember().hasConnectedInstaMember()) {
-            return rq.historyBack("잘못된 접근입니다.");
-        }
-
-        if(rq.getMember().getInstaMember().getId() != id)
-            return rq.historyBack("잘못된 접근입니다.");
-
-        RsData<InstaMember> disconnectResult = instaMemberService.disconnect(rq.getMember(), rq.getMember().getInstaMember());
+        RsData<InstaMember> disconnectResult = instaMemberService.disconnect(rq.getMember(), id);
 
         if (disconnectResult.isFail()) {
             return rq.historyBack(disconnectResult);

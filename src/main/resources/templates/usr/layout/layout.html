@@ -26,12 +26,6 @@
                         </a>
                         <form class="!hidden" hidden th:action="|/usr/member/logout|" method="POST"></form>
                     </li>
-                    <li>
-                        <a href="/usr/home/about">
-                            <i class="fa-solid fa-heart"></i>
-                            그램그램이란?
-                        </a>
-                    </li>
                     <li th:if="${@rq.login}">
                         <a href="/usr/member/me">
                             <i class="fa-solid fa-user"></i> 내 정보
@@ -67,18 +61,15 @@
         <div class="navbar-center">
             <a href="/" class="btn btn-ghost normal-case text-xl">
                 <span class="hidden min-[341px]:inline">
-                    gram
+                    ILIKE
                     <i class="fa-solid fa-heart text-red-300"></i>
-                    gram
+                    YOU
                 </span>
                 <span class="min-[341px]:hidden">gg</span>
                 &nbsp;
             </a>
         </div>
         <div class="navbar-end">
-            <a href="/usr/member/pop" class="btn btn-ghost gap-1" th:if="${@rq.login}">
-                <i class="fa-solid fa-chart-line"></i>
-            </a>
             <a href="/usr/notification/list" class="btn btn-ghost btn-circle">
                 <div class="indicator">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"

@@ -37,12 +37,19 @@ public class InstaMember extends InstaMemberBase {
     private Member member;
 
     private int fromLikeablePeopleCount = 0;
+    private int toLikeablePeopleCount = 0; //나를 좋아하는 사람의 수
 
     public void increaseFromLikeablePeopleCount(){
         fromLikeablePeopleCount++;
     }
     public void decreaseFromLikeablePeopleCount(){
         fromLikeablePeopleCount--;
+    }
+    public void increaseToLikeablePeopleCount(){
+        toLikeablePeopleCount++;
+    }
+    public void decreaseToLikeablePeopleCount(){
+        toLikeablePeopleCount--;
     }
     @OneToMany(mappedBy = "fromInstaMember", cascade = {CascadeType.ALL})
     @OrderBy("id desc") // 정렬
@@ -83,10 +90,12 @@ public class InstaMember extends InstaMemberBase {
 
     public void addFromLikeablePerson(LikeablePerson likeablePerson) {
         fromLikeablePeople.add(0, likeablePerson);
+        increaseFromLikeablePeopleCount();
     }
 
     public void addToLikeablePerson(LikeablePerson likeablePerson) {
         toLikeablePeople.add(0, likeablePerson);
+        increaseToLikeablePeopleCount();
     }
 
     public void delFromLikeablePerson(LikeablePerson likeablePerson) {

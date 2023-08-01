@@ -195,19 +195,17 @@ public class LikeablePersonControllerTests {
     void t010() throws Exception {
         Member member = memberService.findByUsername("user2").get();
 
-        //11번을 등록해도 최대 10개
         for (int i = 0; i < 10; i++) {
             likeablePersonService.like(member, "test_instaMember" + i, 1);
         }
         List<LikeablePerson> likeablePeople = likeablePersonService.findByFromInstaMemberId(member.getInstaMember().getId());
 
-
         // WHEN
         ResultActions resultActions = mvc
                 .perform(post("/usr/likeablePerson/like")
                         .with(csrf()) // CSRF 키 생성
-                        .param("username", "test_instaMember11")
-                        .param("attractiveTypeCode", "1")
+                        .param("username", "test_instaMember1")
+                        .param("attractiveTypeCode", "2")
                 )
                 .andDo(print());
 
@@ -215,7 +213,7 @@ public class LikeablePersonControllerTests {
         resultActions
                 .andExpect(handler().handlerType(LikeablePersonController.class))
                 .andExpect(handler().methodName("like"))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is3xxRedirection());
         ;
     }
 

@@ -24,7 +24,6 @@ public class Member extends BaseEntity {
     private String username;
     private String password;
     @OneToOne // 1:1
-    @Setter // memberService::updateInstaMember 함수 때문에
     private InstaMember instaMember;
 
     // 이 함수 자체는 만들어야 한다. 스프링 시큐리티 규격
@@ -41,7 +40,6 @@ public class Member extends BaseEntity {
 
         return grantedAuthorities;
     }
-
 
     public void connectInstaMember(InstaMember instaMember){
         this.instaMember = instaMember;

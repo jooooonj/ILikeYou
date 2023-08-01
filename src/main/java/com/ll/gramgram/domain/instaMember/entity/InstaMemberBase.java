@@ -14,12 +14,17 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true)
 public abstract class InstaMemberBase extends BaseEntity {
     String gender;
-
+    //외모가 좋다고 호감표시한 여성의 수
     long likesCountByWomanAndAttractiveTypeCode1;
+    //성격이 좋다고 호감표시한 여성의 수
     long likesCountByWomanAndAttractiveTypeCode2;
+    //능력이 좋다고 호감표시한 여성의 수
     long likesCountByWomanAndAttractiveTypeCode3;
+    //외모가 좋다고 호감표시한 남성의 수
     long likesCountByManAndAttractiveTypeCode1;
+    //성격이 좋다고 호감표시한 남성의 수
     long likesCountByManAndAttractiveTypeCode2;
+    //능력이 좋다고 호감표시한 남성의 수
     long likesCountByManAndAttractiveTypeCode3;
 
     public Long getLikesCountByWoman() {

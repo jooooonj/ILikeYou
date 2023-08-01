@@ -1,22 +1,22 @@
 package com.ll.gramgram.domain.likeablePerson.service;
 
-import com.ll.gramgram.domain.likeablePerson.validator.LikeablePersonValidator;
-import com.ll.gramgram.global.config.appConfig.AppConfig;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.domain.instaMember.entity.InstaMember;
 import com.ll.gramgram.domain.instaMember.service.InstaMemberService;
 import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.likeablePerson.entity.dto.LikeablePersonResponse;
 import com.ll.gramgram.domain.likeablePerson.repository.LikeablePersonRepository;
+import com.ll.gramgram.domain.likeablePerson.validator.LikeablePersonValidator;
 import com.ll.gramgram.domain.member.entity.Member;
-import com.ll.gramgram.event.EventCanceledLike;
 import com.ll.gramgram.event.EventAddLike;
+import com.ll.gramgram.event.EventCanceledLike;
 import com.ll.gramgram.event.EventModifiedAttractiveType;
+import com.ll.gramgram.global.config.appConfig.AppConfig;
 import com.ll.gramgram.global.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -82,16 +82,8 @@ public class LikeablePersonService {
         return RsData.of("S-1", "삭제되었습니다.");
     }
 
-    public List<LikeablePerson> findByIdFilteredAndSortedList(InstaMember instaMember, String gender, Integer attractiveTypeCode, int sortCode) {
-        Long instaMemberId = instaMember.getId();
-
-        if (StringUtils.isEmpty(gender))
-            gender = null;
-
-        if (attractiveTypeCode==0)
-            attractiveTypeCode = null;
-
-        return findByIdFilteredAndSortedList(instaMemberId, sortCode, gender, attractiveTypeCode);
+    public List<LikeablePersonResponse> findByIdFilteredAndSortedList(InstaMember instaMember, String gender, Integer attractiveTypeCode, Integer sortCode) {
+        return likeablePersonRepository.findByIdFilteredAndSorted(instaMember.getId(), sortCode, gender, attractiveTypeCode);
     }
 
     public LikeablePerson getLikeablePerson(Long fromInstaId, Long toInstaId) {
@@ -106,25 +98,6 @@ public class LikeablePersonService {
         return likeablePersonRepository.findByFromInstaMemberId(fromInstaMemberId);
     }
 
-
-
-    //정렬 코드에 따라서 정렬된 결과를 반환
-    private List<LikeablePerson> findByIdFilteredAndSortedList(Long instaMemberId, int sortCode, String gender, Integer attractiveTypeCode) {
-        switch (sortCode) {
-            case 1:
-                return likeablePersonRepository.findByIdFilteredAndSortedOrderByCreateDateDesc(instaMemberId, gender, attractiveTypeCode);
-            case 2:
-                return likeablePersonRepository.findByIdFilteredAndSortedOrderByHotOfFromInstaMemberAsc(instaMemberId, gender, attractiveTypeCode);
-            case 3:
-                return likeablePersonRepository.findByIdFilteredAndSortedOrderByHotOfFromInstaMemberDesc(instaMemberId, gender, attractiveTypeCode);
-            case 4:
-                return likeablePersonRepository.findByIdFilteredAndSortedOrderByGenderOfFromInstaMemberAsc(instaMemberId, gender, attractiveTypeCode);
-            case 5:
-                return likeablePersonRepository.findByIdFilteredAndSortedOrderByAttractiveTypeCodeAsc(instaMemberId, gender, attractiveTypeCode);
-            default:
-                return likeablePersonRepository.findByIdFilteredAndSortedOrderByCreateDateAsc(instaMemberId, gender, attractiveTypeCode);
-        }
-    }
 
     private LikeablePerson createLikeablePerson(int attractiveTypeCode, InstaMember fromInstaMember, InstaMember toInstaMember) {
         LikeablePerson likeablePerson = LikeablePerson

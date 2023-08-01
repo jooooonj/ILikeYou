@@ -9,7 +9,6 @@ import com.ll.gramgram.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 @Service
@@ -28,8 +27,6 @@ public class InstaMemberService {
     // username : 입력한 본인 인스타 username
     // gender : 입력한 본인의 성별
     public RsData<InstaMember> connect(Member member, String username, String gender) {
-
-
         Optional<InstaMember> opInstaMember = findByUsername(username); // 혹시 다른 회원이 이미 입력하신 인스타 ID와 연결되었는지
 
         // 등록이 되어있고
@@ -62,13 +59,12 @@ public class InstaMemberService {
             instaMember.setGender(gender);
             instaMemberRepository.save(instaMember);
 
-            actor.setInstaMember(instaMember);
+            actor.connectInstaMember(instaMember);
 
             return RsData.of("S-3", "인스타계정이 연결되었습니다.", instaMember);
         }
 
         opInstaMember = findByUsername(username);
-
         if (opInstaMember.isPresent()) {
             InstaMember instaMember = opInstaMember.get();
             instaMember.setOauthId(oauthId);
@@ -76,47 +72,31 @@ public class InstaMemberService {
             instaMember.setGender(gender);
             instaMemberRepository.save(instaMember);
 
-            actor.setInstaMember(instaMember);
+            memberService.connectInstaMember(actor, instaMember);
 
             return RsData.of("S-4", "인스타계정이 연결되었습니다.", instaMember);
         }
 
         InstaMember instaMember = connect(actor, username, gender).getData();
-
         instaMember.setOauthId(oauthId);
         instaMember.setAccessToken(accessToken);
-
         return RsData.of("S-5", "인스타계정이 연결되었습니다.", instaMember);
     }
-
-
 
     private RsData<InstaMember> connect(Member member, InstaMember instaMember){
         memberService.connectInstaMember(member, instaMember);
         instaMember.connectedByMember(member);
-        InstaMember ins = instaMemberRepository.save(instaMember);
-
-        return RsData.of("S-1", "인스타 계정이 연결되었습니다.", ins);
-    }
-
-    // InstaMember 생성
-    private RsData<InstaMember> create(String username, String gender) {
-        InstaMember instaMember = InstaMember
-                .builder()
-                .username(username)
-                .gender(gender)
-                .build();
-
         instaMemberRepository.save(instaMember);
 
-        return RsData.of("S-1", "인스타계정이 등록되었습니다.", instaMember);
+        return RsData.of("S-1", "인스타 계정이 연결되었습니다.", instaMember);
     }
 
     @Transactional
     public RsData<InstaMember> findByUsernameOrCreate(String username) {
         Optional<InstaMember> opInstaMember = findByUsername(username);
 
-        if (opInstaMember.isPresent()) return RsData.of("S-2", "인스타계정이 등록되었습니다.", opInstaMember.get());
+        if (opInstaMember.isPresent())
+            return RsData.of("S-2", "인스타계정이 등록되었습니다.", opInstaMember.get());
 
         // 아직 성별을 알 수 없으니, 언노운의 의미로 U 넣음
         return create(username, "U");
@@ -140,8 +120,11 @@ public class InstaMemberService {
         return create(username, gender);
     }
 
+
     public InstaMember findById(long id){
-        return instaMemberRepository.findById(id).orElseThrow();
+        return instaMemberRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException(id+"는 가입되지 않은 인스타계정입니다.")
+        );
     }
 
     public void eventCanceledLike(LikeablePerson likeablePerson){
@@ -154,6 +137,7 @@ public class InstaMemberService {
         fromInstaMember.delFromLikeablePerson(likeablePerson);
     }
 
+    @Transactional
     public void eventLiked(LikeablePerson likeablePerson){
         InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
         InstaMember toInstaMember = likeablePerson.getToInstaMember();
@@ -185,11 +169,33 @@ public class InstaMemberService {
     }
 
     @Transactional
-    public RsData<InstaMember> disconnect(Member member, InstaMember instaMember) {
+    public RsData<InstaMember> disconnect(Member member, Long instaId) {
+        if (!member.hasConnectedInstaMember()) {
+            return RsData.of("F-1", "연결된 인스타 계정이 없습니다.");
+        }
+
+        if(member.getInstaMember().getId() != instaId) {
+            return RsData.of("F-2", "잘못된 접근입니다.");
+        }
+
+        InstaMember instaMember = findById(instaId);
         memberService.disconnectInstaMember(member);
         instaMember.disConnected();
         instaMemberRepository.save(instaMember);
 
         return RsData.of("S-1", "인스타계정(%s)과 연결이 헤제되었습니다.".formatted(instaMember.getUsername()));
+    }
+
+    // InstaMember 생성
+    private RsData<InstaMember> create(String username, String gender) {
+        InstaMember instaMember = InstaMember
+                .builder()
+                .username(username)
+                .gender(gender)
+                .build();
+
+        instaMemberRepository.save(instaMember);
+
+        return RsData.of("S-1", "인스타계정이 등록되었습니다.", instaMember);
     }
 }

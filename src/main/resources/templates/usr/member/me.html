@@ -61,11 +61,6 @@
         <a href="/usr/member/pop" class="mt-10 mb-4 block">
             <i class="fa-solid fa-chart-line"></i>
             내 인기
-
-            <span class="float-right text-sm">
-                <i class="fa-solid fa-angles-right"></i>
-                자세히 보기
-            </span>
         </a>
 
         <div class="flex flex-col gap-4 mt-4">
@@ -252,11 +247,6 @@
         <a href="/usr/likeablePerson/toList" class="mt-10 mb-4 block">
             <i class="fa-solid fa-fire"></i>
             최근에 받은 호감
-
-            <span class="float-right text-sm">
-                <i class="fa-solid fa-angles-right"></i>
-                자세히 보기
-            </span>
         </a>
 
         <div class="text-center mt-10" th:if="${#lists.isEmpty(@rq.member.instaMember.toLikeablePeople)}">
