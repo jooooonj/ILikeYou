@@ -26,13 +26,13 @@
                         <div class="card-body">
                             <h2 class="card-title">
                                 <span><i class="fa-brands fa-instagram"></i></span>
-                                <span th:data-test="|toInstaMember_username=${likeablePerson.toInstaMember.username}|"
-                                      th:text="${likeablePerson.toInstaMember.username}"></span>
+                                <span th:data-test="|toInstaMember_username=${likeablePerson.toInstaMemberUsername}|"
+                                      th:text="${likeablePerson.toInstaMemberUsername}"></span>
                             </h2>
-                            <a th:href="|https://instagram.com/${likeablePerson.toInstaMember.username}|"
+                            <a th:href="|https://instagram.com/${likeablePerson.toInstaMemberUsername}|"
                                target="_blank" class="block text-sm break-all text-blue-400 underline">
                                 <span>https://instagram.com/</span><span class="text-red-400"
-                                                                         th:text="${likeablePerson.toInstaMember.username}"></span>
+                                                                         th:text="${likeablePerson.toInstaMemberUsername}"></span>
                             </a>
 
                             <div class="mt-4 mb-2 flex flex-col items-center gap-2">
