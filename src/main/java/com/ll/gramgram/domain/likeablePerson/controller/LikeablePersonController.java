@@ -4,6 +4,7 @@ import com.ll.gramgram.base.rq.Rq;
 import com.ll.gramgram.base.rsData.RsData;
 import com.ll.gramgram.domain.instaMember.entity.InstaMember;
 import com.ll.gramgram.domain.likeablePerson.entity.LikeablePerson;
+import com.ll.gramgram.domain.likeablePerson.entity.dto.LikeablePersonResponse;
 import com.ll.gramgram.domain.likeablePerson.service.LikeablePersonService;
 import com.ll.gramgram.domain.likeablePerson.validator.LikeablePersonValidator;
 import com.ll.gramgram.domain.member.entity.Member;
@@ -17,7 +18,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
@@ -124,16 +124,16 @@ public class LikeablePersonController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/toList")
-    public String showToList(Model model, @RequestParam(value = "gender", defaultValue = "") String gender,
-                             @RequestParam(value = "attractiveTypeCode", defaultValue = "0") Integer attractiveTypeCode,
-                             @RequestParam(value= "sortCode", defaultValue = "0") int sortCode){
+    public String showToList(Model model, @RequestParam(value = "gender", required = false) String gender,
+                             @RequestParam(value = "attractiveTypeCode", required = false) Integer attractiveTypeCode,
+                             @RequestParam(value= "sortCode", required = false) Integer sortCode){
 
         InstaMember instaMember = rq.getMember().getInstaMember();
 
         // 인스타인증을 했는지 체크
         if (instaMember != null) {
             // 해당 인스타회원을 좋아하는 사람들 목록
-            List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember ,gender, attractiveTypeCode, sortCode);
+            List<LikeablePersonResponse> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember ,gender, attractiveTypeCode, sortCode);
             model.addAttribute("likeablePeople", likeablePeople);
         }
 
@@ -146,5 +146,4 @@ public class LikeablePersonController {
         private int attractiveTypeCode = 0;
         private int sortCode = 1;
     }
-
 }

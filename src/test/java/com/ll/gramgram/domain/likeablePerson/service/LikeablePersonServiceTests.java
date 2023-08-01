@@ -1,5 +1,6 @@
 package com.ll.gramgram.domain.likeablePerson.service;
 
+import com.ll.gramgram.domain.likeablePerson.entity.dto.LikeablePersonResponse;
 import com.ll.gramgram.domain.likeablePerson.validator.LikeablePersonValidator;
 import com.ll.gramgram.global.config.appConfig.AppConfig;
 import com.ll.gramgram.base.rsData.RsData;
@@ -91,7 +92,7 @@ public class LikeablePersonServiceTests {
         assertThat(likeablePerson).isNotNull();
 
         RsData rsData = likeablePersonValidator.validateModify(memberUser3, likeablePerson);
-        assertThat(rsData.getMsg()).isEqualTo("쿨타임으로 인해 수정이 불가능합니다.");
+        assertThat(rsData.getMsg()).isEqualTo("검증 실패, 쿨타임으로 인해 수정이 불가능합니다.");
     }
 
     @Test
@@ -105,7 +106,7 @@ public class LikeablePersonServiceTests {
         assertThat(likeablePerson).isNotNull();
 
         RsData rsData = likeablePersonService.cancel(likeablePerson, memberUser3);
-        assertThat(rsData.getMsg()).isEqualTo("쿨타임으로 인해 삭제가 불가능합니다.");
+        assertThat(rsData.getMsg()).isEqualTo("검증 실패, 쿨타임으로 인해 삭제가 불가능합니다.");
     }
 
     @Test
@@ -115,7 +116,7 @@ public class LikeablePersonServiceTests {
 
         InstaMember instaMember = instaMemberService.findById(4);
 
-        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 0);
+        List<LikeablePersonResponse> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", null, null);
         //전체라서 두 개 나와야 한다.
         assertThat(likeablePeople.size()).isEqualTo(2);
     }
@@ -127,7 +128,7 @@ public class LikeablePersonServiceTests {
 
         InstaMember instaMember = instaMemberService.findById(4);
 
-        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "M", 0, 0);
+        List<LikeablePersonResponse> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "M", null, null);
         //성별 남성은 한개다.
         assertThat(likeablePeople.size()).isEqualTo(1);
     }
@@ -139,7 +140,7 @@ public class LikeablePersonServiceTests {
 
         InstaMember instaMember = instaMemberService.findById(4);
 
-        List<LikeablePerson> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, 1, 0);
+        List<LikeablePersonResponse> likeablePeople = likeablePersonService.findByIdFilteredAndSortedList(instaMember, null, 1, 0);
 
         //호감사유 1 은 한개다.
         assertThat(likeablePeople.size()).isEqualTo(1);
@@ -152,11 +153,11 @@ public class LikeablePersonServiceTests {
         InstaMember instaMember = instaMemberService.findById(4);
 
         //최신순
-        List<LikeablePerson> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 0);
-        LikeablePerson likeablePersonOrderByAsc = likeablePeopleOrderByAsc.get(0);
+        List<LikeablePersonResponse> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", null, null);
+        LikeablePersonResponse likeablePersonOrderByAsc = likeablePeopleOrderByAsc.get(0);
         //오래된순
-        List<LikeablePerson> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 1);
-        LikeablePerson likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
+        List<LikeablePersonResponse> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", null, 1);
+        LikeablePersonResponse likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
 
         assertThat(likeablePersonOrderByAsc.getId()==likeablePersonOrderByDesc.getId()).isEqualTo(true);
     }
@@ -168,11 +169,11 @@ public class LikeablePersonServiceTests {
         InstaMember instaMember = instaMemberService.findById(4);
 
         //인기많은순
-        List<LikeablePerson> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 2);
-        LikeablePerson likeablePersonOrderByAsc = likeablePeopleOrderByAsc.get(0);
+        List<LikeablePersonResponse> likeablePeopleOrderByAsc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", null, 2);
+        LikeablePersonResponse likeablePersonOrderByAsc = likeablePeopleOrderByAsc.get(0);
         //인기적은순
-        List<LikeablePerson> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", 0, 3);
-        LikeablePerson likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
+        List<LikeablePersonResponse> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", null, 3);
+        LikeablePersonResponse likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
 
         assertThat(likeablePersonOrderByAsc.getId()==likeablePersonOrderByDesc.getId()).isEqualTo(true);
     }
