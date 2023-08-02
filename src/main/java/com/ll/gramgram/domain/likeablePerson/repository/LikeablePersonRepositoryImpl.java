@@ -21,8 +21,6 @@ public class LikeablePersonRepositoryImpl implements LikeablePersonRepositoryCus
     }
     @Override
     public List<LikeablePersonResponse> findByIdFilteredAndSorted(Long instaMemberId, Integer sortCode, String gender, Integer attractiveTypeCode) {
-        QInstaMember fromInstaMemberAlias = new QInstaMember("fromInstaMemberAlias");
-        QInstaMember toInstaMemberAlias = new QInstaMember("toInstaMemberAlias");
 
         List<LikeablePersonResponse> result = queryFactory
                 .select(new QLikeablePersonResponse(

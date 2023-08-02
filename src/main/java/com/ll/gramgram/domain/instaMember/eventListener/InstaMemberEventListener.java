@@ -7,29 +7,31 @@ import com.ll.gramgram.event.EventModifiedAttractiveType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class InstaMemberEventListener {
 
     private final InstaMemberService instaMemberService;
 
     //호감 취소 이벤트 발생
-    @EventListener
+    @TransactionalEventListener
     public void listen(EventCanceledLike event) {
         instaMemberService.eventCanceledLike(event.getLikeablePerson());
     }
 
     //호감표시 이벤트 발생
-    @EventListener
+    @TransactionalEventListener
     public void listen(EventAddLike event) {
         instaMemberService.eventLiked(event.getLikeablePerson());
     }
 
     //호감 포인트 변경 이벤트 발생
-    @EventListener
+    @TransactionalEventListener
     public void listen(EventModifiedAttractiveType event) {
         instaMemberService.eventModifiedAttractiveType(event.getLikeablePerson(), event.getOldAttractiveTypeCode(), event.getNewAttractiveTypeCode());
     }
