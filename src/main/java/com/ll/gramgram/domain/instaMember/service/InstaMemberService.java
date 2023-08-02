@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class InstaMemberService {
     private final InstaMemberRepository instaMemberRepository;
     private final MemberService memberService;
@@ -121,6 +120,7 @@ public class InstaMemberService {
     }
 
 
+    @Transactional(readOnly = true)
     public InstaMember findById(long id){
         return instaMemberRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException(id+"는 가입되지 않은 인스타계정입니다.")
@@ -137,7 +137,6 @@ public class InstaMemberService {
         fromInstaMember.delFromLikeablePerson(likeablePerson);
     }
 
-    @Transactional
     public void eventLiked(LikeablePerson likeablePerson){
         InstaMember fromInstaMember = likeablePerson.getFromInstaMember();
         InstaMember toInstaMember = likeablePerson.getToInstaMember();

@@ -46,7 +46,6 @@ public class NotificationService {
         }
     }
 
-    @Transactional
     public void afterAddLike(LikeablePerson likeablePerson) {
         Notification notification = Notification
                 .builder()
@@ -59,7 +58,6 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
-    @Transactional
     public void afterModifyLike(LikeablePerson likeablePerson, int oldAttractiveTypeCode, int newAttractiveTypeCode) {
         Notification notification = Notification
                 .builder()

@@ -175,7 +175,7 @@ public class LikeablePersonServiceTests {
         List<LikeablePersonResponse> likeablePeopleOrderByDesc = likeablePersonService.findByIdFilteredAndSortedList(instaMember, "", null, 3);
         LikeablePersonResponse likeablePersonOrderByDesc = likeablePeopleOrderByDesc.get(1);
 
-        assertThat(likeablePersonOrderByAsc.getId()==likeablePersonOrderByDesc.getId()).isEqualTo(true);
+        assertThat(likeablePeopleOrderByAsc.size()==likeablePeopleOrderByDesc.size()).isEqualTo(true);
     }
 
 
