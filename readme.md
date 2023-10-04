@@ -26,6 +26,10 @@
 - 내가 받은 호감 조회 (필터링, 정렬 가능)
 - 알림 기능
 
+![image](https://github.com/jooooonj/ILikeYou/assets/110995932/c5c74468-840d-4ea2-80f4-cabf5560ef47)
+![image](https://github.com/jooooonj/ILikeYou/assets/110995932/2961345a-0d6f-4049-add8-1938d5d5abee)
+
+
 ## Todo
 
 - [x] 회원가입 폼
